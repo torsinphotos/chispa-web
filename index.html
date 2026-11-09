@@ -2344,5 +2344,176 @@
       }
     }
   </script>
+  <!-- ================= PANEL DE MODERACIÓN ================= -->
+<style>
+  #admin-bar {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #111111;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 9999px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    z-index: 99999;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    align-items: center;
+    gap: 12px;
+  }
+  #admin-bar button {
+    background: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .admin-card-controls {
+    display: none;
+    background: #e5e5ea;
+    padding: 10px 14px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .admin-mode .admin-card-controls {
+    display: flex;
+  }
+</style>
+
+<div id="admin-bar">
+  <span>⚡ Modo Moderador</span>
+  <button id="btn-save-gh" onclick="guardarCambiosEnGitHub()">Guardar en GitHub</button>
+  <button style="background: #333333;" onclick="salirModoAdmin()">Salir</button>
+</div>
+
+<script>
+  const GITHUB_USER = "torsinphotos";
+  const GITHUB_REPO = "chispa-web";
+  const FILE_PATH = "noticias.json";
+
+  let noticiasLocales = [];
+  let fileSha = "";
+
+  async function inicializarNoticias() {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`);
+      const data = await res.json();
+      fileSha = data.sha;
+      noticiasLocales = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+
+      comprobarAdmin();
+      renderizarNoticias();
+    } catch (err) {
+      console.error("Error al cargar noticias:", err);
+    }
+  }
+
+  function comprobarAdmin() {
+    const esAdminUrl = window.location.hash === "#admin";
+    let token = localStorage.getItem("chispa_github_token");
+
+    if (esAdminUrl && !token) {
+      token = prompt("Introduce tu Personal Access Token (ghp_...):");
+      if (token) {
+        localStorage.setItem("chispa_github_token", token.trim());
+      }
+    }
+
+    if (token) {
+      document.body.classList.add("admin-mode");
+      document.getElementById("admin-bar").style.display = "flex";
+    }
+  }
+
+  function renderizarNoticias() {
+    const feed = document.getElementById("news-feed");
+    if (!feed) return;
+    feed.innerHTML = "";
+
+    const esAdmin = Boolean(localStorage.getItem("chispa_github_token"));
+
+    noticiasLocales.forEach((item, index) => {
+      if (!esAdmin && !item.publicado) return;
+
+      const card = document.createElement("article");
+      card.className = "news-card";
+      if (!item.publicado) card.style.opacity = "0.5";
+
+      card.innerHTML = `
+        <div class="admin-card-controls">
+          <span>Estado: <strong>${item.publicado ? "🟢 Publicada" : "🔴 Oculta"}</strong></span>
+          <button onclick="alternarPublicacion(${index})" style="cursor:pointer; padding: 4px 10px; border-radius: 6px; border: 1px solid #bbb;">
+            ${item.publicado ? "Ocultar" : "Publicar"}
+          </button>
+        </div>
+        <div style="font-size: 11px; font-weight: 700; color: #ff0000; margin-bottom: 6px;">${item.categoria || "ACTUALIDAD"}</div>
+        <h2 style="margin: 0 0 10px 0; font-size: 20px;">${item.titular}</h2>
+        <p style="color: #444; line-height: 1.4;">${item.resumen}</p>
+      `;
+      feed.appendChild(card);
+    });
+  }
+
+  function alternarPublicacion(index) {
+    noticiasLocales[index].publicado = !noticiasLocales[index].publicado;
+    renderizarNoticias();
+  }
+
+  async function guardarCambiosEnGitHub() {
+    const token = localStorage.getItem("chispa_github_token");
+    if (!token) return alert("Falta el token de acceso.");
+
+    const btn = document.getElementById("btn-save-gh");
+    btn.textContent = "Guardando...";
+    btn.disabled = true;
+
+    const contenidoJSON = JSON.stringify(noticiasLocales, null, 2);
+    const contenidoBase64 = btoa(unescape(encodeURIComponent(contenidoJSON)));
+
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${FILE_PATH}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `token ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "Actualización de moderación vía web",
+          content: contenidoBase64,
+          sha: fileSha
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        fileSha = data.content.sha;
+        alert("¡Cambios sincronizados en GitHub!");
+      } else {
+        alert("Error de autenticación. Verifica que el token tenga el permiso 'repo'.");
+      }
+    } catch (e) {
+      alert("Error de red al guardar.");
+      console.error(e);
+    } finally {
+      btn.textContent = "Guardar en GitHub";
+      btn.disabled = false;
+    }
+  }
+
+  function salirModoAdmin() {
+    localStorage.removeItem("chispa_github_token");
+    window.location.hash = "";
+    location.reload();
+  }
+
+  window.addEventListener("DOMContentLoaded", inicializarNoticias);
+</script>
 </body>
 </html>
