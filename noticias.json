@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "categoria": "NACIONAL",
+    "lectura": "Lectura: 2 min",
+    "titular": "Acuerdo parlamentario sobre el nuevo marco económico",
+    "resumen": "Las distintas fuerzas políticas alcanzan un consenso para tramitar las reformas presupuestarias de forma prioritaria.",
+    "publicado": true,
+    "sesgos": {
+      "izquierda": { "pct": 45, "enfoque": "Destacan el refuerzo en servicios públicos y derechos laborales." },
+      "centro": { "pct": 30, "enfoque": "Valoran la estabilidad macroeconómica y el consenso transversal." },
+      "derecha": { "pct": 25, "enfoque": "Critican el gasto asociado y piden mayores incentivos a empresas." }
+    },
+    "puntoCiego": "Ninguno de los bloques aborda el impacto sobre el déficit a largo plazo tras la retirada de fondos."
+  },
+  {
+    "id": 2,
+    "categoria": "ECONOMÍA",
+    "lectura": "Lectura: 1 min",
+    "titular": "Borrador de noticia pendiente de validación",
+    "resumen": "Este texto todavía no quiero que se vea en portada.",
+    "publicado": false,
+    "sesgos": {
+      "izquierda": { "pct": 33, "enfoque": "..." },
+      "centro": { "pct": 34, "enfoque": "..." },
+      "derecha": { "pct": 33, "enfoque": "..." }
+    },
+    "puntoCiego": "..."
+  }
+]
