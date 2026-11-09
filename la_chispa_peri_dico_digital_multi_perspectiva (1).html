@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>la chispa — Periodismo de contraste sin ruido</title>
+  <!-- Google Fonts: Barlow (400, 500, 600, 700, 800, 900) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            barlow: ['"Barlow"', 'sans-serif'],
+          },
+          colors: {
+            chispa: {
+              white: '#ffffff',
+              black: '#000000',
+              red: '#ff0000',
+              card: '#f4f4f6',
+              cardHover: '#ececef',
+              muted: '#686870',
+              subtle: '#e2e2e7'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      font-family: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      overflow-x: hidden;
+    }
+    /* Custom High-Contrast Range Sliders for Audio Player */
+    input[type="range"].chispa-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"].chispa-slider::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #2e2e33;
+    }
+    input[type="range"].chispa-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      background: #ff0000;
+      border: 2px solid #ffffff;
+      margin-top: -5px;
+      box-shadow: 0 2px 6px rgba(255, 0, 0, 0.5);
+      transition: transform 0.15s ease;
+    }
+    input[type="range"].chispa-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+    /* Smooth Accordion & Tab transitions */
+    .fade-in {
+      animation: fadeIn 0.22s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Pulse dot for Breaking News */
+    @keyframes pulseRed {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+    }
+    .pulse-red {
+      animation: pulseRed 1.6s infinite ease-in-out;
+    }
+    /* Hide scrollbar for horizontal pill rows on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-chispa-white text-chispa-black min-h-screen flex flex-col selection:bg-chispa-red selection:text-white">
+
+  <!-- =====================================================================
+       1. CABECERA PRINCIPAL (MASTHEAD) — Alineación axial horizontal estricta
+       ===================================================================== -->
+  <header class="w-full border-b border-neutral-200 sticky top-0 z-40 bg-white/95 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      
+      <!-- Izquierda: Logo Estrella 8 Puntas Roja con Comillas + Título "la chispa" en Barlow ExtraBold -->
+      <a href="#portada" onclick="switchMainSection('portada'); return false;" class="flex items-center gap-3.5 group focus:outline-none">
+        <!-- SVG Oficial de "la chispa": Estrella geométrica roja (#ff0000) con comillas blancas centradas -->
+        <svg class="w-12 h-12 sm:w-14 sm:h-14 shrink-0 transition-transform duration-200 group-hover:scale-105" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo la chispa">
+          <polygon points="50,2 63,24 89,14 78,39 98,53 75,65 83,91 57,79 44,98 35,74 9,81 23,57 2,41 28,33 23,8 45,24" fill="#ff0000"/>
+          <!-- Comillas dobles blancas en el centro -->
+          <path d="M40.5 39C36.8 41.8 34.5 45.8 34.5 50.5C34.5 55.2 37.7 58.5 41.8 58.5C45.5 58.5 48.2 55.8 48.2 52.3C48.2 48.8 45.4 46.5 42.3 46.5C41.6 46.5 40.8 46.7 40.5 46.8C41.1 44.3 43.3 41.9 45.8 40.5L40.5 39ZM58.5 39C54.8 41.8 52.5 45.8 52.5 50.5C52.5 55.2 55.7 58.5 59.8 58.5C63.5 58.5 66.2 55.8 66.2 52.3C66.2 48.8 63.4 46.5 60.3 46.5C59.6 46.5 58.8 46.7 58.5 46.8C59.1 44.3 61.3 41.9 63.8 40.5L58.5 39Z" fill="#ffffff"/>
+        </svg>
+        <div class="flex flex-col justify-center">
+          <span class="font-barlow font-extrabold text-3xl sm:text-4xl tracking-tight leading-none text-chispa-black">
+            la chispa
+          </span>
+          <span class="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-neutral-500 mt-1">
+            Contraste informativo · 0% anuncios
+          </span>
+        </div>
+      </a>
+
+      <!-- Derecha Extrema: Fecha actual grande en Barlow Bold, alineada en el mismo eje -->
+      <div class="flex items-center gap-4">
+        <div id="headerDate" class="font-barlow font-extrabold text-sm sm:text-lg md:text-xl text-chispa-black tracking-tight text-right">
+          4 de noviembre de 2026
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===================================================================
+         BARRA DE NAVEGACIÓN DE SECCIONES (SPA)
+         =================================================================== -->
+    <nav class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between border-t border-neutral-100 overflow-x-auto no-scrollbar">
+      <div class="flex items-center space-x-1 sm:space-x-2 py-2" role="tablist">
+        <button onclick="switchMainSection('portada')" id="nav-portada" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-extrabold transition-all bg-chispa-black text-white">
+          Portada
+        </button>
+        <button onclick="switchMainSection('opinion')" id="nav-opinion" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-bold text-neutral-600 hover:text-black hover:bg-chispa-card transition-all flex items-center gap-1.5">
+          <span>Opinión y Foro</span>
+          <span class="bg-chispa-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">VIVO</span>
+        </button>
+        <button onclick="switchMainSection('metodologia')" id="nav-metodologia" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-bold text-neutral-600 hover:text-black hover:bg-chispa-card transition-all">
+          Metodología
+        </button>
+        <button onclick="switchMainSection('buscar')" id="nav-buscar" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-bold text-neutral-600 hover:text-black hover:bg-chispa-card transition-all">
+          Buscar y Archivo
+        </button>
+        <button onclick="switchMainSection('audio')" id="nav-audio" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-bold text-neutral-600 hover:text-black hover:bg-chispa-card transition-all flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-chispa-red" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z"/></svg>
+          <span>Podcast Diario</span>
+        </button>
+        <button onclick="switchMainSection('cuenta')" id="nav-cuenta" class="main-nav-btn px-3.5 py-2 rounded-full text-sm font-bold text-neutral-600 hover:text-black hover:bg-chispa-card transition-all flex items-center gap-1.5">
+          <span>Mi Sesgo / Cuenta</span>
+          <span id="navBiasIndicator" class="hidden w-2 h-2 rounded-full bg-chispa-red"></span>
+        </button>
+      </div>
+
+      <!-- Botón rápido para tu flujo de automatización (Ahorro de Tokens / JSON) -->
+      <button onclick="openAutomationModal()" class="hidden md:flex items-center gap-1.5 text-xs font-extrabold px-3 py-1.5 rounded-full bg-chispa-card hover:bg-black hover:text-white transition-colors shrink-0" title="Cómo actualizar tu web cada día sin gastar tokens">
+        <span class="w-2 h-2 rounded-full bg-chispa-red"></span>
+        <span>Modo Automatización (0 Tokens)</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- =====================================================================
+       CONTENEDOR PRINCIPAL DE LA SPA
+       ===================================================================== -->
+  <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ===================================================================
+         SECCIÓN 1: PORTADA (FEED MULTI-PERSPECTIVA)
+         =================================================================== -->
+    <section id="section-portada" class="spa-section space-y-6">
+      
+      <!-- 1.1 Nivel 1 de Filtros: Ámbito (Todas / España / Internacional) + Indicador de Sesgo -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2" role="group" aria-label="Filtro de ámbito">
+          <button onclick="setScopeFilter('todas')" id="scope-todas" class="scope-btn px-5 py-2.5 rounded-full text-sm font-extrabold bg-chispa-black text-white transition-all">
+            Todas
+          </button>
+          <button onclick="setScopeFilter('espana')" id="scope-espana" class="scope-btn px-5 py-2.5 rounded-full text-sm font-bold bg-chispa-card text-chispa-black hover:bg-neutral-200 transition-all">
+            España
+          </button>
+          <button onclick="setScopeFilter('internacional')" id="scope-internacional" class="scope-btn px-5 py-2.5 rounded-full text-sm font-bold bg-chispa-card text-chispa-black hover:bg-neutral-200 transition-all">
+            Internacional
+          </button>
+        </div>
+
+        <!-- Píldora interactiva del sesgo declarado por el lector -->
+        <div class="flex items-center gap-2">
+          <button onclick="switchMainSection('cuenta')" id="activeBiasBanner" class="text-xs font-bold px-3.5 py-2 rounded-full bg-chispa-card hover:bg-neutral-200 text-neutral-700 flex items-center gap-2 transition-colors">
+            <span class="w-2 h-2 rounded-full bg-chispa-red"></span>
+            <span id="activeBiasBannerText">Configura tu sesgo para detectar tus puntos ciegos →</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 1.2 Sub-barra de "ÚLTIMA HORA" (debajo de Todas/España/Internacional) -->
+      <!-- Muestra las noticias que están temporalmente en Última Hora antes de reclasificarse a su categoría -->
+      <div id="breakingNewsContainer" class="bg-chispa-black text-white rounded-2xl p-4 sm:p-5 transition-all">
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-chispa-red pulse-red"></span>
+            <span class="font-extrabold text-xs sm:text-sm uppercase tracking-wider text-chispa-red">Última Hora · En reclasificación</span>
+          </div>
+          <span class="text-xs text-neutral-400 font-medium">
+            Las alertas permanecen aquí 60 min y conservan su etiqueta temática
+          </span>
+        </div>
+        <div id="breakingNewsList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Renderizado dinámico por JS -->
+        </div>
+      </div>
+
+      <!-- 1.3 Nivel 2 de Filtros: Etiquetas Temáticas (con acceso directo independientemente del ámbito) -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="topicFiltersRow">
+        <!-- Renderizado dinámico por JS -->
+      </div>
+
+      <!-- 1.4 Bloque Destacado: "ÁNGULO CIEGO DE LA AGENDA" (Blindspot en portada) -->
+      <div id="blindspotHeroBox" class="bg-chispa-card rounded-2xl p-5 sm:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div class="flex items-center gap-2.5">
+            <span class="bg-chispa-red text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded-md tracking-wider">
+              Ángulo Ciego del Día
+            </span>
+            <h2 class="font-extrabold text-lg sm:text-xl tracking-tight">
+              Lo que un bloque ideológico cubre masivamente y el otro ignora
+            </h2>
+          </div>
+          <button onclick="filterOnlyBlindspots()" id="toggleBlindspotBtn" class="text-xs font-extrabold underline hover:text-chispa-red self-start sm:self-auto">
+            Ver solo ángulos ciegos
+          </button>
+        </div>
+        <div id="blindspotCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Renderizado dinámico por JS -->
+        </div>
+      </div>
+
+      <!-- 1.5 Contador y estado del Feed Principal -->
+      <div class="flex items-center justify-between pt-2">
+        <h2 class="font-extrabold text-xl sm:text-2xl tracking-tight" id="feedHeadingTitle">
+          Noticias verificadas y contrastadas hoy
+        </h2>
+        <span id="feedCountBadge" class="text-xs font-extrabold bg-chispa-card px-3 py-1 rounded-full text-neutral-600">
+          6 noticias agrupadas
+        </span>
+      </div>
+
+      <!-- 1.6 Lista de Tarjetas de Noticias (Planchas #f4f4f6 sin reborde, estilo Trade Republic) -->
+      <div id="newsFeedContainer" class="space-y-5">
+        <!-- Renderizado dinámico de tarjetas por JS -->
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 2: OPINIÓN Y TRIBUNAS + FORO DE CONTRASTE EN VIVO
+         =================================================================== -->
+    <section id="section-opinion" class="spa-section hidden space-y-8 fade-in">
+      
+      <!-- Cabecera de sección -->
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="bg-chispa-black text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded">El Contraste de Opinión</span>
+          <span class="text-xs font-bold text-neutral-500">Debate diario cara a cara</span>
+        </div>
+        <h1 class="font-extrabold text-2xl sm:text-4xl tracking-tight mb-2">
+          ¿Debe el BCE acelerar la bajada de tipos pese al repunte del alquiler y los servicios?
+        </h1>
+        <p class="text-neutral-600 text-sm sm:text-base max-w-3xl">
+          En lugar de columnas infinitas de opinión dispersas, seleccionamos el tema más debatido del día y enfrentamos los argumentos centrales de dos articulistas de referencia de espectros opuestos.
+        </p>
+
+        <!-- Cara a cara de las 2 columnas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+          
+          <!-- Columna Izquierda -->
+          <div class="bg-white rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-chispa-red text-white">
+                  Enfoque Progresista / Social
+                </span>
+                <span class="text-xs font-bold text-neutral-500">Tribuna · infoLibre / elDiario.es</span>
+              </div>
+              <h3 class="font-extrabold text-xl leading-snug mb-3">
+                "Asfixiar las hipotecas y la inversión verde por un dogma monetario obsoleto"
+              </h3>
+              <p class="text-sm text-neutral-700 leading-relaxed mb-4">
+                Sostiene que la inflación actual en la eurozona no proviene de un exceso de demanda salarial, sino de márgenes empresariales y del coste de la vivienda. Mantener los tipos altos castiga desproporcionadamente a las familias trabajadoras hipotecadas y frena la transición industrial pública.
+              </p>
+              <div class="bg-chispa-card rounded-xl p-3.5 text-xs space-y-1.5">
+                <div class="font-extrabold text-black">Argumentos clave:</div>
+                <p class="text-neutral-700">• Los salarios reales apenas han recuperado el nivel pre-pandemia.</p>
+                <p class="text-neutral-700">• El encarecimiento del crédito bloquea la construcción de parque público de alquiler.</p>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-neutral-100 flex items-center justify-between">
+              <span class="text-xs font-bold text-neutral-600">Por Marta Echevarría (Economista)</span>
+              <button onclick="VoteOpinion('left')" id="voteLeftBtn" class="text-xs font-extrabold px-3 py-1.5 rounded-full bg-chispa-card hover:bg-black hover:text-white transition-colors">
+                👍 Argumento sólido (<span id="voteLeftCount">142</span>)
+              </button>
+            </div>
+          </div>
+
+          <!-- Columna Derecha -->
+          <div class="bg-white rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-chispa-black text-white">
+                  Enfoque Liberal / Conservador
+                </span>
+                <span class="text-xs font-bold text-neutral-500">Tribuna · El Mundo / Expansión</span>
+              </div>
+              <h3 class="font-extrabold text-xl leading-snug mb-3">
+                "Abaratar el dinero mientras el gasto público sigue desbocado reavivará la inflación"
+              </h3>
+              <p class="text-sm text-neutral-700 leading-relaxed mb-4">
+                Advierte que bajar los tipos prematuramente con un déficit estructural elevado en países como España o Francia enviaría una señal peligrosa al mercado de deuda. Defiende que el problema de la vivienda es de inseguridad jurídica y falta de suelo, no de tipos de interés.
+              </p>
+              <div class="bg-chispa-card rounded-xl p-3.5 text-xs space-y-1.5">
+                <div class="font-extrabold text-black">Argumentos clave:</div>
+                <p class="text-neutral-700">• La inflación de servicios sigue por encima del 3,5% anual en la eurozona.</p>
+                <p class="text-neutral-700">• Sin consolidación fiscal, el dinero barato solo alimenta burbujas de activos.</p>
+              </div>
+            </div>
+            <div class="mt-5 pt-4 border-t border-neutral-100 flex items-center justify-between">
+              <span class="text-xs font-bold text-neutral-600">Por Carlos Álvarez-Nóvoa (Analista)</span>
+              <button onclick="VoteOpinion('right')" id="voteRightBtn" class="text-xs font-extrabold px-3 py-1.5 rounded-full bg-chispa-card hover:bg-black hover:text-white transition-colors">
+                👍 Argumento sólido (<span id="voteRightCount">138</span>)
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- FORO / CHAT COMUNITARIO DE CONTRASTE DEL DÍA -->
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-chispa-red pulse-red"></span>
+              <h2 class="font-extrabold text-xl sm:text-2xl tracking-tight">Foro Abierto: ¿Qué opinas del contraste de hoy?</h2>
+            </div>
+            <p class="text-xs sm:text-sm text-neutral-600 mt-1">
+              Debate moderado por argumentos. Declara desde qué perspectiva comentas para enriquecer la conversación.
+            </p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="filterForum('all')" id="forum-filter-all" class="forum-filter-btn text-xs font-extrabold px-3 py-1.5 rounded-full bg-chispa-black text-white">Todos</button>
+            <button onclick="filterForum('Izquierda')" id="forum-filter-Izquierda" class="forum-filter-btn text-xs font-bold px-3 py-1.5 rounded-full bg-white text-black">Izquierda</button>
+            <button onclick="filterForum('Centro')" id="forum-filter-Centro" class="forum-filter-btn text-xs font-bold px-3 py-1.5 rounded-full bg-white text-black">Centro</button>
+            <button onclick="filterForum('Derecha')" id="forum-filter-Derecha" class="forum-filter-btn text-xs font-bold px-3 py-1.5 rounded-full bg-white text-black">Derecha</button>
+          </div>
+        </div>
+
+        <!-- Formulario para publicar en el Foro -->
+        <form onsubmit="submitForumPost(event)" class="bg-white rounded-2xl p-4 sm:p-5 mb-6 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-neutral-500 mb-1">Tu alias o nombre</label>
+              <input type="text" id="forumUserAlias" required placeholder="Ej. Javier M." class="w-full px-3.5 py-2 rounded-xl bg-chispa-card text-sm font-bold focus:outline-none focus:ring-2 focus:ring-chispa-black" />
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-neutral-500 mb-1">Tu perspectiva en este tema</label>
+              <select id="forumUserStance" class="w-full px-3.5 py-2 rounded-xl bg-chispa-card text-sm font-bold focus:outline-none focus:ring-2 focus:ring-chispa-black">
+                <option value="Centro">Centro / Pragmático</option>
+                <option value="Izquierda">Izquierda / Social</option>
+                <option value="Derecha">Derecha / Liberal</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold uppercase text-neutral-500 mb-1">Noticia / Tema</label>
+              <select id="forumTopicRef" class="w-full px-3.5 py-2 rounded-xl bg-chispa-card text-sm font-bold focus:outline-none focus:ring-2 focus:ring-chispa-black">
+                <option value="Debate BCE y Vivienda">Debate BCE y Vivienda</option>
+                <option value="Subida del SMI 2027">Subida del SMI 2027</option>
+                <option value="Pacto Migratorio UE">Pacto Migratorio UE</option>
+                <option value="Aranceles Industriales">Aranceles EE.UU. - UE</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold uppercase text-neutral-500 mb-1">Tu argumento contrastado</label>
+            <textarea id="forumUserComment" rows="2" required placeholder="Escribe tu reflexión sobre qué acierta o qué omite cada postura..." class="w-full p-3.5 rounded-xl bg-chispa-card text-sm font-medium focus:outline-none focus:ring-2 focus:ring-chispa-black"></textarea>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-neutral-500 font-medium">Sin insultos ni ruido. Se guarda en tu sesión interactiva.</span>
+            <button type="submit" class="px-5 py-2.5 rounded-full bg-chispa-red text-white font-extrabold text-xs sm:text-sm hover:bg-black transition-colors">
+              Publicar en el Foro →
+            </button>
+          </div>
+        </form>
+
+        <!-- Lista de comentarios del foro -->
+        <div id="forumCommentsList" class="space-y-3">
+          <!-- Renderizado dinámico por JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 3: METODOLOGÍA Y PANEL DE MEDIOS (TRANSPARENCIA)
+         =================================================================== -->
+    <section id="section-metodologia" class="spa-section hidden space-y-8 fade-in">
+      
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8 space-y-4">
+        <span class="bg-chispa-red text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded">Transparencia Radical</span>
+        <h1 class="font-extrabold text-2xl sm:text-4xl tracking-tight">
+          Cómo clasificamos los medios y detectamos los ángulos ciegos
+        </h1>
+        <p class="text-neutral-700 text-sm sm:text-base leading-relaxed max-w-3xl">
+          En <strong>la chispa</strong> creemos que la neutralidad absoluta no existe en un medio individual, pero la honestidad intelectual sí se logra comparando simultáneamente cómo cubren el mismo hecho verificado las cabeceras de <strong>Izquierda</strong>, <strong>Centro</strong> y <strong>Derecha</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-3">
+          <div class="bg-white rounded-2xl p-5">
+            <div class="text-xs font-extrabold uppercase text-chispa-red mb-1">Paso 1 · Agrupación</div>
+            <h3 class="font-extrabold text-lg mb-2">Mismo evento, múltiples fuentes</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed">
+              Monitorizamos más de 35 cabeceras nacionales e internacionales cada mañana mediante RSS y análisis semántico para agrupar las piezas que informan sobre el mismo hecho.
+            </p>
+          </div>
+          <div class="bg-white rounded-2xl p-5">
+            <div class="text-xs font-extrabold uppercase text-chispa-red mb-1">Paso 2 · Radiografía</div>
+            <h3 class="font-extrabold text-lg mb-2">Cálculo de cobertura y sesgo</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed">
+              Clasificamos cada medio según su línea editorial declarada, estudios de recepción del CIS (España), Reuters Institute y paneles equivalentes a AllSides / Ground News.
+            </p>
+          </div>
+          <div class="bg-white rounded-2xl p-5">
+            <div class="text-xs font-extrabold uppercase text-chispa-red mb-1">Paso 3 · Sin juicios morales</div>
+            <h3 class="font-extrabold text-lg mb-2">Qué enfatizan y qué omiten</h3>
+            <p class="text-xs text-neutral-600 leading-relaxed">
+              Nunca decimos "el medio X manipula". Describimos objetivamente qué datos, fuentes o declaraciones destaca en su titular cada bloque y cuáles deja fuera.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Completo de Medios Monitorizados -->
+      <div class="space-y-4">
+        <h2 class="font-extrabold text-xl sm:text-2xl tracking-tight">Panel de Medios Monitorizados (Edición 2026)</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- Bloque Izquierda -->
+          <div class="bg-chispa-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-extrabold text-lg">Bloque Izquierda</span>
+              <span class="bg-chispa-red text-white text-xs font-extrabold px-2.5 py-1 rounded">Progresista / Social</span>
+            </div>
+            <p class="text-xs text-neutral-600 mb-4">
+              Priorizan el impacto en derechos laborales, servicios públicos, desigualdad, crisis climática y derechos humanos.
+            </p>
+            <ul class="space-y-2.5 text-sm font-bold">
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>elDiario.es</span><span class="text-xs text-neutral-500">España · Progresista</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Público</span><span class="text-xs text-neutral-500">España · Izquierda</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>infoLibre</span><span class="text-xs text-neutral-500">España · Izquierda</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>El Salto</span><span class="text-xs text-neutral-500">España · Alternativo</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>The Guardian</span><span class="text-xs text-neutral-500">Internacional · UK</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Le Monde Diplomatique</span><span class="text-xs text-neutral-500">Internacional · FR</span></li>
+            </ul>
+          </div>
+
+          <!-- Bloque Centro -->
+          <div class="bg-chispa-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-extrabold text-lg">Bloque Centro</span>
+              <span class="bg-neutral-800 text-white text-xs font-extrabold px-2.5 py-1 rounded">Agencias / Institucional</span>
+            </div>
+            <p class="text-xs text-neutral-600 mb-4">
+              Agencias de noticias de teletipo, radiotelevisión pública y cabeceras de corte institucional o centro-socioliberal.
+            </p>
+            <ul class="space-y-2.5 text-sm font-bold">
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Agencia EFE</span><span class="text-xs text-neutral-500">Agencia Pública</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Europa Press</span><span class="text-xs text-neutral-500">Agencia Privada</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>RTVE Noticias</span><span class="text-xs text-neutral-500">Pública · Institucional</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>El País</span><span class="text-xs text-neutral-500">Centro-Izquierda</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Reuters / AP</span><span class="text-xs text-neutral-500">Agencia Global</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Financial Times / BBC</span><span class="text-xs text-neutral-500">Internacional</span></li>
+            </ul>
+          </div>
+
+          <!-- Bloque Derecha -->
+          <div class="bg-chispa-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-extrabold text-lg">Bloque Derecha</span>
+              <span class="bg-chispa-black text-white text-xs font-extrabold px-2.5 py-1 rounded">Liberal / Conservador</span>
+            </div>
+            <p class="text-xs text-neutral-600 mb-4">
+              Priorizan la competitividad empresarial, control del gasto público, fiscalidad, seguridad jurídica y unidad constitucional.
+            </p>
+            <ul class="space-y-2.5 text-sm font-bold">
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>El Mundo</span><span class="text-xs text-neutral-500">Centro-Derecha Liberal</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>ABC</span><span class="text-xs text-neutral-500">Conservador</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>La Razón</span><span class="text-xs text-neutral-500">Derecha</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>El Confidencial / Expansión</span><span class="text-xs text-neutral-500">Económico Liberal</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>Libertad Digital / The Objective</span><span class="text-xs text-neutral-500">Derecha Liberal</span></li>
+              <li class="bg-white rounded-xl p-3 flex justify-between items-center"><span>The Wall Street Journal</span><span class="text-xs text-neutral-500">Internacional · US</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quién financia y edita La Chispa -->
+      <div class="bg-chispa-black text-white rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-chispa-red">Independencia Económica</span>
+          <h3 class="font-extrabold text-xl sm:text-2xl">¿Quién financia y edita "la chispa"?</h3>
+          <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+            No aceptamos publicidad institucional, ni banners programáticos, ni patrocinios de partidos o grandes corporaciones. Nuestro único ingreso proviene de los suscriptores que valoran leer la actualidad en 5 minutos sin manipulación emocional.
+          </p>
+        </div>
+        <button onclick="switchMainSection('cuenta')" class="px-6 py-3 rounded-full bg-chispa-red text-white font-extrabold text-sm hover:bg-white hover:text-black transition-colors shrink-0">
+          Personalizar mi cuenta →
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 4: BUSCADOR Y ARCHIVO HISTÓRICO
+         =================================================================== -->
+    <section id="section-buscar" class="spa-section hidden space-y-6 fade-in">
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8 space-y-5">
+        <h1 class="font-extrabold text-2xl sm:text-3xl tracking-tight">Buscador y Archivo de Cobertura</h1>
+        <p class="text-sm text-neutral-600">
+          Busca por palabra clave, nombre de medio (ej. <em>El País</em>, <em>El Mundo</em>, <em>elDiario.es</em>, <em>RTVE</em>) o explora cómo ha evolucionado la cobertura de los grandes temas.
+        </p>
+
+        <!-- Barra de búsqueda instantánea -->
+        <div class="relative">
+          <input
+            type="text"
+            id="archiveSearchInput"
+            oninput="runArchiveSearch()"
+            placeholder="Escribe una palabra clave, tema o medio (ej. salario, vivienda, fronteras, aranceles, El Salto, ABC)..."
+            class="w-full px-5 py-4 rounded-2xl bg-white text-base font-bold text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-chispa-black"
+          />
+          <button onclick="clearArchiveSearch()" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-extrabold text-neutral-500 hover:text-chispa-red">
+            Limpiar
+          </button>
+        </div>
+
+        <!-- Filtros rápidos por temas recurrentes -->
+        <div class="space-y-2">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-neutral-500">Temas estructurales recurrentes:</span>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setQuickSearch('SMI')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">📈 Inflación y Salarios</button>
+            <button onclick="setQuickSearch('vivienda')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">🏠 Vivienda y Alquiler</button>
+            <button onclick="setQuickSearch('fronteras')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">🌍 Migración y Fronteras</button>
+            <button onclick="setQuickSearch('nuclear')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">⚡ Energía y Nucleares</button>
+            <button onclick="setQuickSearch('aranceles')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">🌐 Geopolítica y Comercio</button>
+            <button onclick="setQuickSearch('algoritmos')" class="px-3.5 py-1.5 rounded-full bg-white hover:bg-black hover:text-white text-xs font-bold transition-colors">🤖 IA y Regulación</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados del Buscador -->
+      <div id="archiveResultsContainer" class="space-y-4">
+        <!-- Renderizado dinámico por JS -->
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 5: AUDIO (EL RESUMEN SONORO DEL DÍA / PODCAST DIARIO)
+         =================================================================== -->
+    <section id="section-audio" class="spa-section hidden space-y-6 fade-in">
+      <div class="bg-chispa-black text-white rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span class="bg-chispa-red text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded">Podcast Diario · Edición Mañana</span>
+            <h1 class="font-extrabold text-2xl sm:text-4xl tracking-tight mt-2">
+              El Resumen Sonoro de "la chispa"
+            </h1>
+            <p class="text-neutral-300 text-sm mt-1">
+              Escucha de un tirón las 6 noticias clave de hoy en España y el mundo con el contraste de qué destaca cada bloque ideológico.
+            </p>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="text-xs font-bold text-neutral-400 block">Duración total estimada</span>
+            <span class="font-extrabold text-2xl text-white">04:30 min</span>
+          </div>
+        </div>
+
+        <!-- Reproductor Master de Alto Contraste -->
+        <div class="bg-neutral-900 rounded-2xl p-5 space-y-4 border border-neutral-800">
+          <div class="flex items-center justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-3">
+              <button onclick="toggleMasterPodcast()" id="masterPlayBtn" class="w-14 h-14 rounded-full bg-chispa-red text-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg">
+                <svg id="masterPlayIcon" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <div>
+                <div class="text-xs font-extrabold uppercase text-chispa-red" id="masterNowPlayingLabel">Listo para reproducir · Síntesis de voz activa</div>
+                <div class="font-extrabold text-base sm:text-lg text-white" id="masterCurrentChapterTitle">Boletín Completo — 4 de noviembre de 2026</div>
+              </div>
+            </div>
+
+            <!-- Controles de salto -10s / +10s y Velocidad 1x / 1.5x / 2x -->
+            <div class="flex items-center gap-2">
+              <button onclick="skipMasterAudio(-10)" class="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-extrabold text-white transition-colors">
+                -10s
+              </button>
+              <button onclick="skipMasterAudio(10)" class="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-extrabold text-white transition-colors">
+                +10s
+              </button>
+              <button onclick="cycleMasterSpeed()" id="masterSpeedBtn" class="px-3 py-1.5 rounded-lg bg-chispa-red text-xs font-extrabold text-white transition-colors">
+                1x
+              </button>
+            </div>
+          </div>
+
+          <!-- Línea de tiempo visible en alto contraste rojo (#ff0000) -->
+          <div class="space-y-1.5">
+            <input
+              type="range"
+              id="masterTimelineSlider"
+              min="0"
+              max="100"
+              value="0"
+              oninput="seekMasterAudio(this.value)"
+              class="w-full chispa-slider"
+            />
+            <div class="flex justify-between text-xs font-extrabold text-neutral-300">
+              <span id="masterTimeCurrent">0:00</span>
+              <span id="masterAudioStatusNote" class="text-neutral-400">Usa el motor de voz en español de tu navegador + temporizador sincronizado</span>
+              <span id="masterTimeTotal">4:30</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lista de capítulos / noticias dentro del podcast diario -->
+        <div class="space-y-2.5">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-neutral-400">Capítulos incluidos en el boletín de hoy (pulsa cualquiera para escucharlo):</div>
+          <div id="podcastChaptersList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- Renderizado dinámico por JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         SECCIÓN 6: CUENTA DE USUARIO Y PERSONALIZACIÓN ("MI SESGO")
+         =================================================================== -->
+    <section id="section-cuenta" class="spa-section hidden space-y-8 fade-in">
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8 space-y-6">
+        <div>
+          <span class="bg-chispa-red text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded">Antídoto contra la cámara de eco</span>
+          <h1 class="font-extrabold text-2xl sm:text-3xl tracking-tight mt-2">
+            Declara tu sesgo habitual para activar tu Detector de Punto Ciego
+          </h1>
+          <p class="text-sm text-neutral-600 mt-1 max-w-3xl">
+            Todos tenemos una inclinación natural al informarnos. Si nos indicas qué tipo de prensa sueles leer más, <strong>la chispa</strong> marcará automáticamente en la Portada con una etiqueta roja <strong>"🔥 Tu Punto Ciego"</strong> aquellas noticias que están siendo muy cubiertas por el espectro contrario al tuyo.
+          </p>
+        </div>
+
+        <!-- Selector de Sesgo del Usuario -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <button onclick="setUserBias('izquierda')" id="bias-btn-izquierda" class="bias-choice-btn p-5 rounded-2xl bg-white text-left transition-all hover:shadow-md">
+            <div class="text-xs font-extrabold uppercase text-chispa-red mb-1">Opción 1</div>
+            <div class="font-extrabold text-lg mb-1">Suelo leer más Izquierda</div>
+            <p class="text-xs text-neutral-600">Destacaremos en tu portada las noticias donde la Derecha o el Centro están poniendo el foco hoy.</p>
+          </button>
+
+          <button onclick="setUserBias('centro')" id="bias-btn-centro" class="bias-choice-btn p-5 rounded-2xl bg-white text-left transition-all hover:shadow-md">
+            <div class="text-xs font-extrabold uppercase text-neutral-500 mb-1">Opción 2</div>
+            <div class="font-extrabold text-lg mb-1">Suelo leer más Centro</div>
+            <p class="text-xs text-neutral-600">Destacaremos en tu portada los debates polarizados en los extremos que las agencias pasan por alto.</p>
+          </button>
+
+          <button onclick="setUserBias('derecha')" id="bias-btn-derecha" class="bias-choice-btn p-5 rounded-2xl bg-white text-left transition-all hover:shadow-md">
+            <div class="text-xs font-extrabold uppercase text-chispa-black mb-1">Opción 3</div>
+            <div class="font-extrabold text-lg mb-1">Suelo leer más Derecha</div>
+            <p class="text-xs text-neutral-600">Destacaremos en tu portada las noticias sociales o laborales que la Izquierda cubre masivamente.</p>
+          </button>
+
+          <button onclick="setUserBias('ninguno')" id="bias-btn-ninguno" class="bias-choice-btn p-5 rounded-2xl bg-white text-left transition-all hover:shadow-md">
+            <div class="text-xs font-extrabold uppercase text-neutral-400 mb-1">Por defecto</div>
+            <div class="font-extrabold text-lg mb-1">No declarar sesgo</div>
+            <p class="text-xs text-neutral-600">Verás los ángulos ciegos generales de la agenda sin personalización individual.</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Noticias Guardadas por el Usuario -->
+      <div class="bg-chispa-card rounded-2xl p-6 sm:p-8 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="font-extrabold text-xl sm:text-2xl tracking-tight">Mis Noticias Guardadas</h2>
+          <span id="savedCountLabel" class="text-xs font-extrabold bg-white px-3 py-1 rounded-full">0 guardadas</span>
+        </div>
+        <div id="savedArticlesContainer" class="space-y-3">
+          <!-- Renderizado dinámico por JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       MODAL DE AUTOMATIZACIÓN Y AHORRO DE TOKENS (Para el creador)
+       ===================================================================== -->
+  <div id="automationModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <span class="bg-chispa-red text-white text-xs font-extrabold uppercase px-2.5 py-1 rounded">Guía de Arquitectura · 0 Tokens en HTML</span>
+          <h2 class="font-extrabold text-2xl sm:text-3xl tracking-tight mt-2">
+            Cómo actualizar "la chispa" cada día sin gastar tokens
+          </h2>
+        </div>
+        <button onclick="closeAutomationModal()" class="w-9 h-9 rounded-full bg-chispa-card font-extrabold text-lg flex items-center justify-center hover:bg-black hover:text-white">
+          ✕
+        </button>
+      </div>
+
+      <p class="text-sm text-neutral-700 leading-relaxed">
+        El error más común al usar Claude o cualquier IA es pedirle que regenere las 1.200 líneas de código HTML/CSS/JS todos los días (lo cual agota tus tokens en 2 mensajes). <strong>La solución profesional que ya lleva integrada esta plantilla es separar el diseño estático (`index.html`) de los datos diarios (`noticias.json`).</strong>
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        <div class="bg-chispa-card p-4 rounded-2xl">
+          <div class="font-extrabold text-chispa-red uppercase mb-1">1. En tu GitHub Pages</div>
+          <p class="text-neutral-700">Subes este archivo <code>index.html</code> una sola vez. Nunca más tienes que pedirle a la IA que toque el diseño ni el reproductor.</p>
+        </div>
+        <div class="bg-chispa-card p-4 rounded-2xl">
+          <div class="font-extrabold text-chispa-red uppercase mb-1">2. Tu Prompt Diario</div>
+          <p class="text-neutral-700">Cada mañana solo le pides a la IA que te devuelva el bloque JSON con las 6 noticias del día (gasta un 90% menos de tokens).</p>
+        </div>
+        <div class="bg-chispa-card p-4 rounded-2xl">
+          <div class="font-extrabold text-chispa-red uppercase mb-1">3. Prueba en Vivo Aquí</div>
+          <p class="text-neutral-700">Puedes pegar un JSON nuevo aquí abajo o copiar el Prompt Maestro optimizado para generar las noticias de mañana.</p>
+        </div>
+      </div>
+
+      <!-- Prompt Maestro listo para copiar -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-extrabold uppercase text-neutral-600">Prompt diario ultra-optimizado (Cópialo para generar solo las noticias):</label>
+          <button onclick="copyDailyPrompt()" id="copyPromptBtn" class="text-xs font-extrabold px-3 py-1 rounded-full bg-chispa-black text-white hover:bg-chispa-red transition-colors">
+            Copiar Prompt Maestro
+          </button>
+        </div>
+        <textarea id="dailyPromptTextarea" readonly rows="5" class="w-full p-3.5 rounded-2xl bg-chispa-card font-mono text-xs text-neutral-800 focus:outline-none">Actúa como el editor jefe de "la chispa". Agrupa las 6 noticias más importantes de hoy (3 de España y 3 Internacionales). Devuelve ÚNICAMENTE un array JSON válido (sin markdown adicional ni código HTML) siguiendo exactamente las claves del objeto NEWS_DATA: id, scope ("espana"|"internacional"), topic, isBreaking (boolean), breakingReclassifiesIn, blindspotType ("left"|"right"|null), iconType ("coins"|"borders"|"energy"|"trade"|"housing"|"ai"), title, shortSummary, fullNeutralText (array de 2 párrafos), stats ({left, center, right, totalOutlets}), sources ({left:[], center:[], right:[]}), spectrum ({left:{outlet, headline, summary, url}, center:{...}, right:{...}}), y blindspotAnalysis ({emphasizes:[], omits:[]}).</textarea>
+      </div>
+
+      <div class="flex justify-end">
+        <button onclick="closeAutomationModal()" class="px-6 py-2.5 rounded-full bg-chispa-black text-white text-sm font-extrabold">
+          Entendido, volver al periódico
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       PIE DE PÁGINA INSTITUCIONAL (FOOTER)
+       ===================================================================== -->
+  <footer class="border-t border-neutral-200 mt-16 bg-chispa-card/60">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-2.5">
+            <svg class="w-8 h-8 shrink-0" viewBox="0 0 100 100" fill="none">
+              <polygon points="50,2 63,24 89,14 78,39 98,53 75,65 83,91 57,79 44,98 35,74 9,81 23,57 2,41 28,33 23,8 45,24" fill="#ff0000"/>
+              <path d="M40.5 39C36.8 41.8 34.5 45.8 34.5 50.5C34.5 55.2 37.7 58.5 41.8 58.5C45.5 58.5 48.2 55.8 48.2 52.3C48.2 48.8 45.4 46.5 42.3 46.5C41.6 46.5 40.8 46.7 40.5 46.8C41.1 44.3 43.3 41.9 45.8 40.5L40.5 39ZM58.5 39C54.8 41.8 52.5 45.8 52.5 50.5C52.5 55.2 55.7 58.5 59.8 58.5C63.5 58.5 66.2 55.8 66.2 52.3C66.2 48.8 63.4 46.5 60.3 46.5C59.6 46.5 58.8 46.7 58.5 46.8C59.1 44.3 61.3 41.9 63.8 40.5L58.5 39Z" fill="#ffffff"/>
+            </svg>
+            <span class="font-extrabold text-2xl tracking-tight">la chispa</span>
+          </div>
+          <p class="text-xs text-neutral-600 max-w-sm leading-relaxed">
+            Periódico digital de análisis multi-perspectiva. Inspirado en la claridad visual de Trade Republic y la radiografía de medios de Ground News y AllSides.
+          </p>
+        </div>
+
+        <div class="space-y-2 text-xs font-bold">
+          <div class="uppercase tracking-wider text-neutral-400 font-extrabold">Secciones</div>
+          <ul class="space-y-1.5 text-neutral-700">
+            <li><button onclick="switchMainSection('portada')" class="hover:text-chispa-red">Portada del Día</button></li>
+            <li><button onclick="switchMainSection('opinion')" class="hover:text-chispa-red">El Contraste de Opinión y Foro</button></li>
+            <li><button onclick="switchMainSection('audio')" class="hover:text-chispa-red">Podcast Resumen Sonoro</button></li>
+            <li><button onclick="switchMainSection('buscar')" class="hover:text-chispa-red">Archivo y Buscador</button></li>
+          </ul>
+        </div>
+
+        <div class="space-y-2 text-xs font-bold">
+          <div class="uppercase tracking-wider text-neutral-400 font-extrabold">Transparencia</div>
+          <ul class="space-y-1.5 text-neutral-700">
+            <li><button onclick="switchMainSection('metodologia')" class="hover:text-chispa-red">Metodología y Panel de Medios</button></li>
+            <li><button onclick="switchMainSection('metodologia')" class="hover:text-chispa-red">Cómo nos financiamos (0% anuncios)</button></li>
+            <li><button onclick="openAutomationModal()" class="text-chispa-red hover:underline">Prompt y JSON para Automatización</button></li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="border-t border-neutral-200 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 font-medium gap-2">
+        <span>© 2026 la chispa · Edición España e Internacional · Sin cookies de rastreo publicitario.</span>
+        <span>Tipografía Barlow · Diseño de alto contraste (#ffffff / #000000 / #ff0000)</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       LÓGICA JAVASCRIPT ESTRUCTURADA Y DATOS DEL PERIÓDICO
+       ===================================================================== -->
+  <script>
+    // =====================================================================
+    // 1. ICONOS VECTORIALES PROPIOS (Estilo Minimalista Blanco/Rojo sobre Negro)
+    // =====================================================================
+    function getTopicSvgIllustration(iconType) {
+      const icons = {
+        coins: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="20" cy="16" rx="11" ry="5" stroke="#ffffff" stroke-width="2.5"/>
+            <path d="M9 16V24C9 26.76 13.92 29 20 29C26.08 29 31 26.76 31 24V16" stroke="#ffffff" stroke-width="2.5"/>
+            <path d="M9 24V32C9 34.76 13.92 37 20 37C26.08 37 31 34.76 31 32V24" stroke="#ffffff" stroke-width="2.5"/>
+            <path d="M31 21L39 13M39 13H33M39 13V19" stroke="#ff0000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>`,
+        borders: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="15" stroke="#ffffff" stroke-width="2.5"/>
+            <path d="M9 24H39M24 9C28 13.5 29.5 18.5 29.5 24C29.5 29.5 28 34.5 24 39C20 34.5 18.5 29.5 18.5 24C18.5 18.5 20 13.5 24 9Z" stroke="#ffffff" stroke-width="2"/>
+            <rect x="14" y="21" width="20" height="6" rx="1.5" fill="#ff0000"/>
+          </svg>`,
+        energy: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M26 8L12 26H24L22 40L36 22H24L26 8Z" stroke="#ff0000" stroke-width="2.8" stroke-linejoin="round" fill="#ff0000" fill-opacity="0.2"/>
+            <circle cx="24" cy="24" r="18" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4"/>
+          </svg>`,
+        trade: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 18H36L30 12" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38 30H12L18 36" stroke="#ff0000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="18" y="21" width="12" height="6" rx="1" stroke="#ffffff" stroke-width="2"/>
+          </svg>`,
+        housing: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 23L24 11L38 23" stroke="#ff0000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 21V37H34V21" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/>
+            <rect x="21" y="27" width="6" height="10" stroke="#ffffff" stroke-width="2"/>
+          </svg>`,
+        ai: `
+          <svg class="w-10 h-10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="14" width="20" height="20" rx="4" stroke="#ffffff" stroke-width="2.5"/>
+            <circle cx="24" cy="24" r="4" fill="#ff0000"/>
+            <path d="M20 8V14M28 8V14M20 34V40M28 34V40M8 20H14M8 28H14M34 20H40M34 28H40" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>`
+      };
+      return icons[iconType] || icons.coins;
+    }
+
+    // =====================================================================
+    // 2. MODELO DE DATOS COMPLETO (NOTICIAS ESPAÑA E INTERNACIONAL)
+    // =====================================================================
+    const NEWS_DATA = [
+      {
+        id: "smi-2027",
+        scope: "espana",
+        scopeLabel: "España",
+        topic: "Economía y Empresas",
+        isBreaking: true,
+        breakingReclassifiesIn: "38 min",
+        blindspotType: null,
+        iconType: "coins",
+        durationSec: 48,
+        title: "El Gobierno aprueba la subida del salario mínimo para 2027 tras cerrarse la mesa sin acuerdo con la patronal",
+        shortSummary: "El Consejo de Ministros fija el nuevo SMI tras tres semanas de negociación con sindicatos y CEOE. La medida afecta directamente a 2,5 millones de trabajadores en España.",
+        fullNeutralText: [
+          "El Consejo de Ministros ha aprobado este miércoles el real decreto que actualiza el Salario Mínimo Interprofesional (SMI) de cara al ejercicio 2027 con un incremento del 4,2%, situándolo en 1.218 euros brutos mensuales en 14 pagas. El Ministerio de Trabajo cerró el texto con el respaldo de CCOO y UGT después de que la patronal CEOE-Cepyme rechazara la última propuesta técnica al considerar que no incluía bonificaciones para el sector agrario ni la indexación de los contratos públicos.",
+          "Mientras el Ejecutivo y las organizaciones sindicales defienden que el incremento permite mantener el salario mínimo en el 60% del sueldo medio neto recomendado por la Carta Social Europea sin destruir empleo agregado, las asociaciones empresariales y el Banco de España han pedido evaluar el impacto asimétrico sobre las microempresas, el comercio minorista y las comunidades autónomas con menor renta per cápita."
+        ],
+        stats: { left: 40, center: 30, right: 30, totalOutlets: 18 },
+        sources: {
+          left: ["Público", "elDiario.es", "infoLibre", "El Salto"],
+          center: ["Agencia EFE", "RTVE", "El País", "Europa Press"],
+          right: ["El Mundo", "ABC", "La Razón", "Expansión", "Libertad Digital"]
+        },
+        spectrum: {
+          left: {
+            outlet: "PÚBLICO / ELDIARIO.ES",
+            headline: "El SMI sube y beneficia a 2,5 millones de trabajadores pese al bloqueo de la patronal",
+            summary: "Presenta el incremento como una conquista laboral frente a la inflación de alimentos y vivienda, utilizando a los sindicatos y datos de reducción de brecha de género como eje principal.",
+            url: "#fuente-izquierda-smi"
+          },
+          center: {
+            outlet: "RTVE / EL PAÍS",
+            headline: "Trabajo aprueba el alza del SMI del 4,2% solo con los sindicatos y abre el debate sobre su tributación en el IRPF",
+            summary: "Sitúa el foco en la ruptura del diálogo bipartito con la CEOE y en la discusión técnica entre Hacienda y Trabajo sobre el mínimo exento de tributación.",
+            url: "#fuente-centro-smi"
+          },
+          right: {
+            outlet: "EL MUNDO / EXPANSIÓN",
+            headline: "El Gobierno impone otra subida del SMI que eleva un 58% los costes laborales de las pymes desde 2018",
+            summary: "Enfatiza el impacto acumulado en las cotizaciones sociales de autónomos y pequeñas empresas y denuncia la negativa del Gobierno a actualizar las tarifas de licitaciones públicas.",
+            url: "#fuente-derecha-smi"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Izquierda: Poder adquisitivo de jóvenes y mujeres y récords de afiliación a la Seguridad Social.",
+            "Centro: Discrepancia técnica entre los ministerios de Hacienda y Trabajo por la retención del IRPF.",
+            "Derecha: Coste real de cotizaciones para autónomos y destrucción de empleo en el campo y hostelería."
+          ],
+          omits: [
+            "Izquierda: Omite que el Estado no actualiza al mismo ritmo el precio que paga a las contratas públicas.",
+            "Derecha: Pasa por alto que los márgenes empresariales agregados del IBEX y gran distribución marcaron récord en el último trimestre."
+          ]
+        }
+      },
+      {
+        id: "ue-fronteras",
+        scope: "internacional",
+        scopeLabel: "Internacional",
+        topic: "Europa",
+        isBreaking: false,
+        breakingReclassifiesIn: null,
+        blindspotType: "left", // Muy cubierto por izquierda (62%), poco por derecha (13%)
+        iconType: "borders",
+        durationSec: 52,
+        title: "La UE activa el nuevo mecanismo de retorno rápido en fronteras exteriores y acuerdos con terceros países",
+        shortSummary: "Los ministros del Interior de los Veintisiete aprueban la puesta en marcha de centros de tramitación acelerada fuera de territorio comunitario para solicitantes de países considerados seguros.",
+        fullNeutralText: [
+          "El Consejo de Justicia y Asuntos de Interior de la Unión Europea ha dado luz verde en Bruselas al reglamento operativo que adelanta la aplicación del Pacto de Migración y Asilo. La norma permite procesar en un plazo máximo de 12 semanas las solicitudes de asilo en centros situados en las fronteras exteriores o en terceros países con acuerdo bilateral cuando el solicitante proceda de un Estado con una tasa de reconocimiento inferior al 20%.",
+          "Quince gobiernos europeos —liderados por Italia, Países Bajos, Polonia y Dinamarca— han respaldado endurecer los retornos efectivos, que actualmente apenas alcanzan el 22% de las órdenes dictadas en la UE. Por el contrario, más de cuarenta organizaciones de derechos humanos y juristas del Parlamento Europeo alertan del riesgo de detenciones de facto sin garantías procesales individuales."
+        ],
+        stats: { left: 62, center: 25, right: 13, totalOutlets: 16 },
+        sources: {
+          left: ["El Salto", "elDiario.es", "Público", "The Guardian", "infoLibre"],
+          center: ["Euronews", "RTVE", "El País", "Agencia EFE"],
+          right: ["ABC", "El Mundo"]
+        },
+        spectrum: {
+          left: {
+            outlet: "EL SALTO / THE GUARDIAN",
+            headline: "La UE externaliza sus fronteras a costa de los derechos humanos y financia centros de internamiento opacos",
+            summary: "Pone el foco en las denuncias de ONG internacionales, los informes sobre vulneraciones en países del norte de África y la falta de asistencia letrada independiente.",
+            url: "#fuente-izquierda-ue"
+          },
+          center: {
+            outlet: "EL PAÍS / EURONEWS",
+            headline: "Bruselas acelera el Pacto Migratorio bajo la presión electoral de los gobiernos conservadores europeos",
+            summary: "Analiza el equilibrio político de Ursula von der Leyen y las dudas jurídicas de países como España o Alemania sobre el modelo de centros extracomunitarios.",
+            url: "#fuente-centro-ue"
+          },
+          right: {
+            outlet: "ABC / EL MUNDO",
+            headline: "Europa busca frenar la inmigración irregular tras el fracaso del actual sistema de expulsiones",
+            summary: "Destaca que casi el 80% de las órdenes de expulsión en suelo europeo nunca se ejecutan y defiende el modelo disuasorio para combatir a las mafias de tráfico de personas.",
+            url: "#fuente-derecha-ue"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Izquierda (62% de la cobertura): Auditorías sobre violaciones de derechos humanos en países de tránsito.",
+            "Derecha: Colapso administrativo de los servicios de acogida municipales y baja tasa de retorno efectivo."
+          ],
+          omits: [
+            "Ángulo ciego para lectores de Derecha: La mayoría de medios conservadores apenas cubren hoy el coste multimillonario por plaza que han supuesto experimentos similares como el de Italia en Albania.",
+            "Izquierda: Omite la falta de capacidad logística de los ayuntamientos fronterizos."
+          ]
+        }
+      },
+      {
+        id: "vivienda-inseguridad",
+        scope: "espana",
+        scopeLabel: "España",
+        topic: "Sociedad",
+        isBreaking: false,
+        breakingReclassifiesIn: null,
+        blindspotType: "right", // Muy cubierto por derecha (68%), poco por izquierda (12%)
+        iconType: "housing",
+        durationSec: 45,
+        title: "La oferta de alquiler permanente cae un 19% en las zonas tensionadas mientras se dispara el alquiler de temporada",
+        shortSummary: "Un informe cruzado de registradores y portales inmobiliarios refleja el trasvase de pisos hacia contratos de 11 meses y habitaciones para esquivar los topes de precios.",
+        fullNeutralText: [
+          "El último balance del mercado residencial español del tercer trimestre de 2026 confirma que la cartera de viviendas disponibles para alquiler habitual de larga duración se ha reducido un 19% interanual en los municipios declarados como zonas tensionadas. Paralelamente, los anuncios de arrendamiento de temporada (de 1 a 11 meses) y el alquiler por habitaciones representan ya el 34% de la nueva oferta en capitales como Barcelona, Madrid, Valencia y Bilbao.",
+          "Los propietarios y asociaciones inmobiliarias atribuyen esta retirada de pisos al temor a los controles de rentas y a la demora judicial de hasta 18 meses en los procesos de desahucio por impago. Por su parte, el Ministerio de Vivienda y los sindicatos de inquilinos sostienen que la caída se debe a un fraude de ley masivo de grandes tenedores y anuncian un registro único obligatorio con sanciones para los contratos temporales sin causa justificada."
+        ],
+        stats: { left: 12, center: 20, right: 68, totalOutlets: 15 },
+        sources: {
+          left: ["elDiario.es", "Público"],
+          center: ["El País", "Europa Press", "Cinco Días"],
+          right: ["El Mundo", "ABC", "La Razón", "El Confidencial", "Libertad Digital", "The Objective"]
+        },
+        spectrum: {
+          left: {
+            outlet: "ELDIARIO.ES",
+            headline: "Los rentistas utilizan el agujero del alquiler de temporada y por habitaciones para burlar el tope de precios",
+            summary: "Subraya que en los municipios con tope de rentas los inquilinos con contrato renovado sí han ahorrado hasta 180 euros mensuales y reclama sancionar las plataformas.",
+            url: "#fuente-izquierda-vivienda"
+          },
+          center: {
+            outlet: "EL PAÍS / CINCO DÍAS",
+            headline: "El control de alquileres contiene las rentas firmadas pero seca la oferta para nuevos inquilinos",
+            summary: "Muestra la doble cara estadística: bajan ligeramente los precios registrados en contratos oficiales, pero entran un 30% menos de viviendas al mercado tradicional.",
+            url: "#fuente-centro-vivienda"
+          },
+          right: {
+            outlet: "EL MUNDO / EL CONFIDENCIAL",
+            headline: "La Ley de Vivienda hunde otro 19% la oferta de alquiler y expulsa del mercado a los jóvenes y rentas medias",
+            summary: "Destaca que el pequeño ahorrador retira sus pisos por la prórroga de los decretos antidesahucios y la inseguridad jurídica, encareciendo la entrada a quienes buscan piso hoy.",
+            url: "#fuente-derecha-vivienda"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Derecha (68% de la cobertura): Desplome del número de pisos anunciados y exigencia de nóminas más altas por miedo a impagos.",
+            "Izquierda: Especulación con contratos de 11 meses y pisos turísticos."
+          ],
+          omits: [
+            "Ángulo ciego para lectores de Izquierda: Los medios progresistas apenas recogen hoy los datos oficiales del CGPJ sobre el aumento a 18,4 meses del plazo medio para recuperar una vivienda con impago.",
+            "Derecha: Omite que en comunidades donde no se aplica el tope de precios el alquiler libre ha subido un 11,4% interanual."
+          ]
+        }
+      },
+      {
+        id: "aranceles-eeuu-ue",
+        scope: "internacional",
+        scopeLabel: "Internacional",
+        topic: "Geopolítica",
+        isBreaking: true,
+        breakingReclassifiesIn: "52 min",
+        blindspotType: null,
+        iconType: "trade",
+        durationSec: 46,
+        title: "Estados Unidos y la UE abren una tregua de 90 días sobre los aranceles al acero, automóvil y componentes verdes",
+        shortSummary: "Washington y Bruselas suspenden temporalmente los recargos cruzados del 15% mientras negocian cuotas conjuntas frente al sobrecapacidad industrial de China.",
+        fullNeutralText: [
+          "El Departamento de Comercio de Estados Unidos y la Comisión Europea han anunciado a primera hora de hoy una moratoria de 90 días en la entrada en vigor de los nuevos aranceles recíprocos sobre el sector de la automoción, el acero especial y los productos agroalimentarios europeos (incluyendo el aceite de oliva y el vino español). A cambio, Bruselas se compromete a revisar sus compras de gas natural licuado estadounidense y a alinear los controles sobre semiconductores y baterías procedentes de Asia.",
+          "Las bolsas europeas —con el IBEX 35 y el DAX alemán a la cabeza— han reaccionado con subidas superiores al 1,4%. Sin embargo, los fabricantes europeos de componentes advierten que una tregua trimestral no ofrece la certidumbre necesaria para desbloquear inversiones multimillonarias en plantas de vehículos eléctricos."
+        ],
+        stats: { left: 28, center: 42, right: 30, totalOutlets: 21 },
+        sources: {
+          left: ["The Guardian", "elDiario.es", "Le Monde"],
+          center: ["Reuters", "Financial Times", "El País", "RTVE", "Agencia EFE"],
+          right: ["The Wall Street Journal", "Expansión", "El Mundo", "ABC"]
+        },
+        spectrum: {
+          left: {
+            outlet: "LE MONDE / ELDIARIO.ES",
+            headline: "Bruselas cede ante la presión de Washington comprando más gas de fracking a cambio de una tregua precaria",
+            summary: "Critica la subordinación estratégica europea y advierte que el acuerdo compromete los objetivos climáticos de la UE al incrementar las importaciones de GNL.",
+            url: "#fuente-izquierda-aranceles"
+          },
+          center: {
+            outlet: "FINANCIAL TIMES / REUTERS",
+            headline: "EE.UU. y la UE evitan la guerra comercial inminente y pactan un frente común sobre sobrecapacidad asiática",
+            summary: "Valora el alivio inmediato para las cadenas de suministro transatlánticas y detalla el calendario técnico de las mesas sectoriales de aquí a febrero.",
+            url: "#fuente-centro-aranceles"
+          },
+          right: {
+            outlet: "EXPANSIÓN / WSJ",
+            headline: "Alivio para las exportadoras españolas de aceite, vino y motor tras el giro pragmático de la Comisión Europea",
+            summary: "Resalta el impacto positivo en la cotización de la industria europea y pide a Bruselas reducir la burocracia regulatoria interna para competir con EE.UU.",
+            url: "#fuente-derecha-aranceles"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Izquierda: Dependencia energética del gas licuado estadounidense y pérdida de soberanía climática.",
+            "Centro:Detalles técnicos de las cuotas de acero y calendario de negociación.",
+            "Derecha: Alivio bursátil y salvación de 3.200 millones en exportaciones agroalimentarias españolas."
+          ],
+          omits: [
+            "Izquierda: Minimiza el impacto directo que el arancel del 15% habría tenido hoy mismo sobre las cooperativas olivareras andaluzas.",
+            "Derecha: Omite que la factura energética industrial en Europa sigue siendo el doble de cara que en EE.UU."
+          ]
+        }
+      },
+      {
+        id: "energia-nucleares-red",
+        scope: "espana",
+        scopeLabel: "España",
+        topic: "Clima y Energía",
+        isBreaking: false,
+        breakingReclassifiesIn: null,
+        blindspotType: null,
+        iconType: "energy",
+        durationSec: 44,
+        title: "Red Eléctrica reclama acelerar las inversiones en baterías y redes ante el debate sobre el calendario de cierre nuclear",
+        shortSummary: "El operador del sistema advierte de vertidos récord de energía solar en horas centrales del día por saturación de nudos mientras el Congreso debate prorrogar la vida de Almaraz.",
+        fullNeutralText: [
+          "El informe técnico de cobertura de la demanda publicado hoy por Red Eléctrica (Redeia) señala que España generó el 61% de su electricidad con fuentes renovables en los últimos doce meses, pero tuvo que desperdiciar (mediante 'curtailments' o paradas técnicas) un 8,4% de la producción fotovoltaica y eólica en horas punta por falta de capacidad en la red de transporte y almacenamiento por bombeo o baterías.",
+          "El documento coincide con el debate parlamentario sobre la proposición para aplazar el cierre del primer reactor de la central nuclear de Almaraz. Las eléctricas y la oposición piden extender la vida útil nuclear diez años más para garantizar potencia firme nocturna y contener precios, mientras Transición Ecológica mantiene el calendario pactado en 2019 argumentando que el coste de gestión de residuos en Enresa recaería sobre los consumidores."
+        ],
+        stats: { left: 34, center: 31, right: 35, totalOutlets: 17 },
+        sources: {
+          left: ["infoLibre", "Público", "elDiario.es", "El Salto"],
+          center: ["El País", "Agencia EFE", "RTVE"],
+          right: ["El Mundo", "ABC", "El Confidencial", "La Razón"]
+        },
+        spectrum: {
+          left: {
+            outlet: "INFOLIBRE / PÚBLICO",
+            headline: "El oligopolio eléctrico presiona para alargar las nucleares y rebajar la tasa de residuos que pagan por ley",
+            summary: "Sostiene que las compañías buscan socializar el coste del cementerio nuclear mientras frenan la inversión en almacenamiento distribuido y autoconsumo.",
+            url: "#fuente-izquierda-energia"
+          },
+          center: {
+            outlet: "EL PAÍS / EFE",
+            headline: "El auge renovable choca con los cuellos de botella de la red eléctrica y reabre el debate sobre la potencia firme",
+            summary: "Explica el reto técnico de integrar 15 GW solares adicionales sin baterías suficientes y recoge la postura del regulador CNMC sobre los peajes de red.",
+            url: "#fuente-centro-energia"
+          },
+          right: {
+            outlet: "EL MUNDO / ABC",
+            headline: "Ingenieros y patronal alertan de que cerrar Almaraz disparará el recibo de la luz y el uso del gas",
+            summary: "Compara la estrategia española con la rectificación nuclear de Francia, Suecia y Estados Unidos para abastecer centros de datos e industria pesada.",
+            url: "#fuente-derecha-energia"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Izquierda: El coste de la tasa Enresa (gestión de residuos radiactivos) y la rentabilidad récord de las renovables.",
+            "Derecha: Seguridad de suministro nocturno para centros de datos e industria electrointensiva."
+          ],
+          omits: [
+            "Izquierda: Pasa por alto que cuando cae el sol y no sopla viento, el hueco nuclear se cubre hoy quemando gas natural importado con emisiones de CO2.",
+            "Derecha: Omite que fueron las propias empresas propietarias de las centrales quienes firmaron voluntariamente el calendario de cierre en 2019."
+          ]
+        }
+      },
+      {
+        id: "ia-tribunales-algoritmos",
+        scope: "espana",
+        scopeLabel: "España",
+        topic: "Tribunales",
+        isBreaking: false,
+        breakingReclassifiesIn: null,
+        blindspotType: null,
+        iconType: "ai",
+        durationSec: 42,
+        title: "El Tribunal Supremo obliga a las administraciones y grandes empresas a auditar y abrir el código de sus algoritmos de selección",
+        shortSummary: "Una sentencia pionera establece el derecho de ciudadanos y sindicatos a conocer las reglas matemáticas con las que se conceden ayudas públicas o se fijan turnos laborales.",
+        fullNeutralText: [
+          "La Sala de lo Contencioso-Administrativo del Tribunal Supremo ha dictado una sentencia de jurisprudencia que obliga a las administraciones públicas —y a las empresas concesionarias de servicios esenciales— a entregar los parámetros, ponderaciones y criterios de entrenamiento de los sistemas automatizados o de inteligencia artificial utilizados para adjudicar ayudas sociales, becas o evaluar el rendimiento laboral.",
+          "El fallo rechaza que el secreto comercial o la propiedad intelectual puedan situarse por encima del derecho a la tutela judicial efectiva cuando un algoritmo toma decisiones con efectos jurídicos sobre las personas. Las patronales tecnológicas advierten de riesgos de seguridad informática si se expone el código fuente completo, mientras las asociaciones de derechos digitales celebran el fin de las 'cajas negras' administrativas."
+        ],
+        stats: { left: 45, center: 35, right: 20, totalOutlets: 14 },
+        sources: {
+          left: ["elDiario.es", "Público", "infoLibre"],
+          center: ["El País", "RTVE", "Europa Press"],
+          right: ["Expansión", "El Mundo"]
+        },
+        spectrum: {
+          left: {
+            outlet: "ELDIARIO.ES / INFOLIBRE",
+            headline: "Victoria histórica contra los algoritmos opacos: el Supremo prohíbe ocultar cómo decide la máquina sobre ayudas y despidos",
+            summary: "Celebra que los trabajadores y solicitantes de prestaciones puedan auditar sesgos discriminatorios en sistemas automatizados.",
+            url: "#fuente-izquierda-ia"
+          },
+          center: {
+            outlet: "EL PAÍS / RTVE",
+            headline: "El Supremo fija doctrina sobre transparencia algorítmica y limita el secreto empresarial en el sector público",
+            summary: "Detalla los fundamentos jurídicos de la sentencia y cómo se alinea con el Reglamento Europeo de Inteligencia Artificial (AI Act).",
+            url: "#fuente-centro-ia"
+          },
+          right: {
+            outlet: "EXPANSIÓN / EL MUNDO",
+            headline: "Las tecnológicas piden al Supremo acotar la apertura de algoritmos para proteger la propiedad industrial ante competidores",
+            summary: "Recoge la preocupación de consultoras y desarrolladores de software por posibles fugas de propiedad intelectual en licitaciones públicas.",
+            url: "#fuente-derecha-ia"
+          }
+        },
+        blindspotAnalysis: {
+          emphasizes: [
+            "Izquierda: Protección frente a despidos automatizados y denegación errónea del bono social.",
+            "Derecha: Protección del secreto industrial y competitividad de las firmas de software."
+          ],
+          omits: [
+            "Izquierda: Omite la complejidad técnica de auditar modelos de redes neuronales profundas sin comprometer datos privados.",
+            "Derecha: Omite casos documentados donde un error de código dejó sin ayuda a miles de familias vulnerables sin explicación."
+          ]
+        }
+      }
+    ];
+
+    // =====================================================================
+    // 3. ESTADO REACTIVO DE LA APLICACIÓN
+    // =====================================================================
+    let currentMainSection = "portada";
+    let currentScopeFilter = "todas"; // 'todas' | 'espana' | 'internacional'
+    let currentTopicFilter = "Todos los temas";
+    let filterOnlyBlindspotsActive = false;
+
+    // Estado de expansión y pestañas de cada tarjeta
+    const expandedCards = new Set(["smi-2027"]); // Primera noticia abierta por defecto para mostrar la potencia
+    const cardActiveTab = {}; // id -> 'tab1' | 'tab2' | 'tab3'
+    const cardActiveSpectrumMobile = {}; // id -> 'left' | 'center' | 'right'
+
+    // Preferencias del usuario (persistidas en localStorage)
+    let userBias = localStorage.getItem("chispa_user_bias") || "ninguno";
+    let savedArticles = JSON.parse(localStorage.getItem("chispa_saved_articles") || "[]");
+
+    // Estado del Reproductor de Audio Individual y Master (Web Speech API + Fallback Timer)
+    let activeAudioState = {
+      cardId: null, // o 'MASTER' para el podcast diario
+      isPlaying: false,
+      currentSec: 0,
+      totalSec: 48,
+      speed: 1,
+      volume: 1,
+      timerInterval: null,
+      speechSupported: 'speechSynthesis' in window
+    };
+
+    // Comentarios del Foro de Contraste
+    const DEFAULT_FORUM_POSTS = [
+      {
+        id: 101,
+        alias: "Elena G. (Madrid)",
+        stance: "Izquierda",
+        topic: "Subida del SMI 2027",
+        comment: "Lo más revelador de la pestaña 'Qué omiten' es ver que la patronal se queja del SMI pero el Gobierno tampoco indexa los contratos públicos. Si subes el salario mínimo por ley, el propio Estado debe actualizar lo que paga a las contratas de limpieza o dependencia.",
+        likes: 29,
+        time: "Hace 18 min"
+      },
+      {
+        id: 102,
+        alias: "Marcos R. (Valencia)",
+        stance: "Derecha",
+        topic: "Debate BCE y Vivienda",
+        comment: "Muy útil el bloque de Ángulo Ciego en el tema de la vivienda. Leyendo solo prensa progresista parece que todo es culpa de fondos buitre, y leyendo solo prensa conservadora parece que no existen contratos fraudulentos de 11 meses. La realidad son las dos cosas a la vez.",
+        likes: 34,
+        time: "Hace 32 min"
+      },
+      {
+        id: 103,
+        alias: "Sofía D. (Salamanca)",
+        stance: "Centro",
+        topic: "Pacto Migratorio UE",
+        comment: "Agradezco muchísimo este formato tipo Trade Republic sin banners ni popups. En 3 minutos ves el titular de El Salto, el de El País y el de ABC en la misma tarjeta sin tener que abrir 10 pestañas.",
+        likes: 41,
+        time: "Hace 1 hora"
+      }
+    ];
+    let forumPosts = JSON.parse(localStorage.getItem("chispa_forum_posts") || JSON.stringify(DEFAULT_FORUM_POSTS));
+    let currentForumFilter = "all";
+
+    // =====================================================================
+    // 4. INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // =====================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      updateBiasUI();
+      renderBreakingNewsBar();
+      renderTopicFilterPills();
+      renderBlindspotHero();
+      renderMainNewsFeed();
+      renderForumPosts();
+      renderArchiveSearch();
+      renderMasterPodcastChapters();
+      renderSavedArticles();
+    });
+
+    // =====================================================================
+    // 5. NAVEGACIÓN ENTRE LAS 6 SECCIONES DE LA SPA
+    // =====================================================================
+    function switchMainSection(sectionId) {
+      currentMainSection = sectionId;
+      document.querySelectorAll(".spa-section").forEach(sec => sec.classList.add("hidden"));
+      const target = document.getElementById(`section-${sectionId}`);
+      if (target) target.classList.remove("hidden");
+
+      // Actualizar botones de navegación superior
+      document.querySelectorAll(".main-nav-btn").forEach(btn => {
+        btn.classList.remove("bg-chispa-black", "text-white", "font-extrabold");
+        btn.classList.add("text-neutral-600", "font-bold");
+      });
+      const activeNav = document.getElementById(`nav-${sectionId}`);
+      if (activeNav) {
+        activeNav.classList.add("bg-chispa-black", "text-white", "font-extrabold");
+        activeNav.classList.remove("text-neutral-600", "font-bold");
+      }
+
+      if (sectionId === "cuenta") renderSavedArticles();
+      if (sectionId === "buscar") runArchiveSearch();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =====================================================================
+    // 6. FILTROS DE PORTADA (Ámbito, Última Hora, Etiquetas Temáticas y Ángulo Ciego)
+    // =====================================================================
+    function setScopeFilter(scope) {
+      currentScopeFilter = scope;
+      document.querySelectorAll(".scope-btn").forEach(btn => {
+        btn.classList.remove("bg-chispa-black", "text-white", "font-extrabold");
+        btn.classList.add("bg-chispa-card", "text-chispa-black", "font-bold");
+      });
+      const activeBtn = document.getElementById(`scope-${scope}`);
+      if (activeBtn) {
+        activeBtn.classList.add("bg-chispa-black", "text-white", "font-extrabold");
+        activeBtn.classList.remove("bg-chispa-card", "text-chispa-black", "font-bold");
+      }
+      renderBreakingNewsBar();
+      renderTopicFilterPills();
+      renderMainNewsFeed();
+    }
+
+    function setTopicFilter(topic) {
+      currentTopicFilter = topic;
+      filterOnlyBlindspotsActive = false;
+      renderTopicFilterPills();
+      renderMainNewsFeed();
+    }
+
+    function filterOnlyBlindspots() {
+      filterOnlyBlindspotsActive = !filterOnlyBlindspotsActive;
+      const btn = document.getElementById("toggleBlindspotBtn");
+      if (btn) {
+        btn.textContent = filterOnlyBlindspotsActive ? "Mostrar todas las noticias" : "Ver solo ángulos ciegos";
+      }
+      renderMainNewsFeed();
+    }
+
+    function renderBreakingNewsBar() {
+      const container = document.getElementById("breakingNewsContainer");
+      const list = document.getElementById("breakingNewsList");
+      const breakingItems = NEWS_DATA.filter(item => {
+        if (!item.isBreaking) return false;
+        if (currentScopeFilter !== "todas" && item.scope !== currentScopeFilter) return false;
+        return true;
+      });
+
+      if (breakingItems.length === 0) {
+        container.classList.add("hidden");
+        return;
+      }
+      container.classList.remove("hidden");
+
+      list.innerHTML = breakingItems.map(item => `
+        <div onclick="jumpToAndExpandArticle('${item.id}')" class="bg-neutral-900 hover:bg-neutral-800 transition-colors p-3.5 rounded-xl cursor-pointer flex flex-col justify-between gap-2 border border-neutral-800">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-chispa-red text-white">${item.scopeLabel}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-800 text-neutral-200">${item.topic}</span>
+            </div>
+            <span class="text-[11px] font-bold text-neutral-400">⏳ Reclasifica a ${item.topic} en ${item.breakingReclassifiesIn}</span>
+          </div>
+          <div class="font-bold text-sm text-white leading-snug hover:underline">${item.title}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderTopicFilterPills() {
+      const row = document.getElementById("topicFiltersRow");
+      const allTopics = ["Todos los temas", ...new Set(NEWS_DATA.map(n => n.topic))];
+
+      row.innerHTML = allTopics.map(topic => {
+        const isActive = currentTopicFilter === topic && !filterOnlyBlindspotsActive;
+        return `
+          <button
+            onclick="setTopicFilter('${topic}')"
+            class="px-4 py-2 rounded-full text-xs sm:text-sm whitespace-nowrap transition-all ${
+              isActive
+                ? 'bg-chispa-red text-white font-extrabold shadow-sm'
+                : 'bg-chispa-card text-chispa-black font-bold hover:bg-neutral-200'
+            }"
+          >
+            ${topic}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderBlindspotHero() {
+      const grid = document.getElementById("blindspotCardsGrid");
+      const blindspots = NEWS_DATA.filter(n => n.blindspotType !== null);
+
+      grid.innerHTML = blindspots.map(item => {
+        const badgeText = item.blindspotType === "left"
+          ? "Ignorado por el 87% de la Derecha · Cubierto al 62% por la Izquierda"
+          : "Ignorado por el 88% de la Izquierda · Cubierto al 68% por la Derecha";
+        return `
+          <div onclick="jumpToAndExpandArticle('${item.id}')" class="bg-white rounded-xl p-4 cursor-pointer hover:shadow-md transition-all flex flex-col justify-between gap-3">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-[11px] font-extrabold text-chispa-red uppercase tracking-wider">⚡ ${badgeText}</span>
+                <span class="text-[11px] font-bold bg-chispa-card px-2 py-0.5 rounded">${item.topic}</span>
+              </div>
+              <h3 class="font-extrabold text-base leading-snug text-black">${item.title}</h3>
+            </div>
+            <div class="space-y-1">
+              <div class="w-full h-2 rounded-full overflow-hidden flex bg-neutral-200">
+                <div style="width:${item.stats.left}%" class="bg-chispa-red"></div>
+                <div style="width:${item.stats.center}%" class="bg-neutral-400"></div>
+                <div style="width:${item.stats.right}%" class="bg-chispa-black"></div>
+              </div>
+              <div class="flex justify-between text-[11px] font-extrabold text-neutral-600">
+                <span>Izq ${item.stats.left}%</span>
+                <span>Cen ${item.stats.center}%</span>
+                <span>Der ${item.stats.right}%</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =====================================================================
+    // 7. RENDERIZADO DE LAS TARJETAS DE NOTICIAS (COLAPSADAS Y DESPLEGADAS)
+    // =====================================================================
+    function isPersonalBlindspot(item) {
+      if (userBias === "izquierda" && item.stats.right >= 50) return true;
+      if (userBias === "derecha" && item.stats.left >= 50) return true;
+      if (userBias === "centro" && (item.stats.left >= 55 || item.stats.right >= 55)) return true;
+      return false;
+    }
+
+    function renderMainNewsFeed() {
+      const container = document.getElementById("newsFeedContainer");
+      const countBadge = document.getElementById("feedCountBadge");
+
+      const filtered = NEWS_DATA.filter(item => {
+        if (currentScopeFilter !== "todas" && item.scope !== currentScopeFilter) return false;
+        if (currentTopicFilter !== "Todos los temas" && item.topic !== currentTopicFilter) return false;
+        if (filterOnlyBlindspotsActive && !item.blindspotType && !isPersonalBlindspot(item)) return false;
+        return true;
+      });
+
+      countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'noticia agrupada' : 'noticias agrupadas'}`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-chispa-card rounded-2xl p-10 text-center space-y-3">
+            <div class="font-extrabold text-xl">No hay noticias con esta combinación de filtros</div>
+            <p class="text-sm text-neutral-600">Prueba a seleccionar "Todas" o "Todos los temas" para ver la portada completa.</p>
+            <button onclick="setScopeFilter('todas'); setTopicFilter('Todos los temas');" class="px-5 py-2.5 rounded-full bg-chispa-black text-white text-xs font-extrabold">
+              Restablecer filtros
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => buildNewsCardHTML(item)).join("");
+    }
+
+    function buildNewsCardHTML(item) {
+      const isExpanded = expandedCards.has(item.id);
+      const activeTab = cardActiveTab[item.id] || "tab2"; // Por defecto mostramos las 3 visiones o el tab elegido
+      const activeMobileSpec = cardActiveSpectrumMobile[item.id] || "left";
+      const isSaved = savedArticles.includes(item.id);
+      const personalBlindspot = isPersonalBlindspot(item);
+
+      // Estado del reproductor para esta tarjeta
+      const isThisCardPlaying = activeAudioState.cardId === item.id && activeAudioState.isPlaying;
+      const currentSec = activeAudioState.cardId === item.id ? activeAudioState.currentSec : 0;
+      const progressPct = Math.min(100, Math.round((currentSec / item.durationSec) * 100));
+
+      return `
+        <!-- TARJETA ENCAPSULADA SIN REBORDE (#f4f4f6, esquinas 16px) -->
+        <article id="card-${item.id}" class="bg-chispa-card rounded-2xl p-5 sm:p-7 transition-all">
+          
+          <!-- CABECERA DE LA TARJETA (SIEMPRE VISIBLE: Icono vectorial + Badges + Titular + Resumen neutro + Barra de sesgo) -->
+          <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-5">
+            
+            <!-- Ilustración vectorial propia en cuadro negro redondeado -->
+            <div onclick="toggleCardExpand('${item.id}')" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-chispa-black flex items-center justify-center shrink-0 cursor-pointer hover:scale-105 transition-transform shadow-sm" title="Pulsa para desplegar o recoger la noticia">
+              ${getTopicSvgIllustration(item.iconType)}
+            </div>
+
+            <!-- Contenido principal de primera instancia -->
+            <div class="flex-1 min-w-0 w-full space-y-2.5">
+              
+              <!-- Fila de Etiquetas (Ámbito, Etiqueta de Tema clickable, Última Hora, Punto Ciego Personal y Guardar) -->
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold uppercase tracking-wider bg-chispa-black text-white">
+                    ${item.scopeLabel}
+                  </span>
+                  <button onclick="setTopicFilter('${item.topic}')" class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-white text-chispa-black hover:bg-chispa-red hover:text-white transition-colors" title="Filtrar por este tema">
+                    🏷️ ${item.topic}
+                  </button>
+                  ${item.isBreaking ? `
+                    <span class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-chispa-red text-white flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+                      Última hora (${item.breakingReclassifiesIn})
+                    </span>
+                  ` : ''}
+                  ${personalBlindspot ? `
+                    <span class="px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-chispa-red text-white">
+                      🔥 Tu Punto Ciego (Según tu sesgo)
+                    </span>
+                  ` : ''}
+                </div>
+
+                <!-- Botón de Guardar noticia -->
+                <button onclick="toggleSaveArticle('${item.id}')" class="text-xs font-extrabold px-2.5 py-1 rounded-lg bg-white hover:bg-black hover:text-white transition-colors flex items-center gap-1" title="Guardar para leer luego">
+                  <span>${isSaved ? '★ Guardada' : '☆ Guardar'}</span>
+                </button>
+              </div>
+
+              <!-- Titular Neutro en Barlow ExtraBold (Clickable para abrir/cerrar) -->
+              <h3 onclick="toggleCardExpand('${item.id}')" class="font-barlow font-extrabold text-xl sm:text-2xl leading-tight text-chispa-black cursor-pointer hover:text-chispa-red transition-colors">
+                ${item.title}
+              </h3>
+
+              <!-- Mini texto neutro de primera instancia (2-3 líneas) -->
+              <p class="text-sm sm:text-base text-neutral-700 leading-relaxed font-normal">
+                ${item.shortSummary}
+              </p>
+
+              <!-- Barra rápida de balance político + Botón de acción "Leer noticia desarrollada ↓" / "Recoger noticia ↑" -->
+              <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                
+                <!-- Mini barra de porcentajes -->
+                <div class="flex-1 max-w-md space-y-1">
+                  <div class="w-full h-2.5 rounded-full overflow-hidden flex bg-white p-0.5">
+                    <div style="width:${item.stats.left}%" class="bg-chispa-red rounded-l-full" title="Izquierda ${item.stats.left}%"></div>
+                    <div style="width:${item.stats.center}%" class="bg-neutral-400" title="Centro ${item.stats.center}%"></div>
+                    <div style="width:${item.stats.right}%" class="bg-chispa-black rounded-r-full" title="Derecha ${item.stats.right}%"></div>
+                  </div>
+                  <div class="flex justify-between text-[11px] font-extrabold text-neutral-600">
+                    <span class="text-chispa-red">Izq ${item.stats.left}%</span>
+                    <span>Centro ${item.stats.center}%</span>
+                    <span class="text-chispa-black">Der ${item.stats.right}%</span>
+                    <span class="text-neutral-400">· ${item.stats.totalOutlets} medios</span>
+                  </div>
+                </div>
+
+                <!-- Botón Toggle Explícito -->
+                <button
+                  onclick="toggleCardExpand('${item.id}')"
+                  class="px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm transition-all self-start sm:self-auto flex items-center gap-1.5 ${
+                    isExpanded
+                      ? 'bg-chispa-black text-white hover:bg-chispa-red'
+                      : 'bg-white text-chispa-black hover:bg-chispa-black hover:text-white shadow-sm'
+                  }"
+                >
+                  <span>${isExpanded ? 'Recoger noticia ↑' : 'Leer noticia desarrollada ↓'}</span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ===============================================================
+               INTERIOR DESPLEGABLE ("EL NÚCLEO DE LA CHISPA")
+               =============================================================== -->
+          ${isExpanded ? `
+            <div class="mt-6 pt-6 border-t border-neutral-200/80 space-y-6 fade-in">
+              
+              <!-- 1. REPRODUCTOR AUDIO-PODCAST DE LA NOTICIA (Con barra roja #ff0000 en alto contraste y voz real) -->
+              <div class="bg-chispa-black text-white rounded-2xl p-4 sm:p-5 space-y-3 shadow-md">
+                <div class="flex items-center justify-between flex-wrap gap-3">
+                  <div class="flex items-center gap-3">
+                    <button
+                      onclick="toggleCardAudio('${item.id}')"
+                      class="w-11 h-11 rounded-full bg-chispa-red text-white flex items-center justify-center hover:scale-105 transition-transform shrink-0"
+                      aria-label="Reproducir o pausar audio de la noticia"
+                    >
+                      ${isThisCardPlaying
+                        ? `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+                        : `<svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`
+                      }
+                    </button>
+                    <div>
+                      <div class="text-[11px] font-extrabold uppercase tracking-wider text-chispa-red">
+                        Audio-Noticia · Escucha mientras lees
+                      </div>
+                      <div class="text-xs sm:text-sm font-bold text-neutral-200 line-clamp-1">
+                        Narración neutra + contraste de medios (${formatTime(item.durationSec)})
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Botones -10s, +10s, Velocidad (1x, 1.5x, 2x) y Volumen -->
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="skipCardAudio('${item.id}', -10)" class="px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-extrabold text-white transition-colors" title="Retroceder 10 segundos">
+                      -10s
+                    </button>
+                    <button onclick="skipCardAudio('${item.id}', 10)" class="px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-xs font-extrabold text-white transition-colors" title="Adelantar 10 segundos">
+                      +10s
+                    </button>
+                    <button onclick="cycleCardSpeed('${item.id}')" class="px-2.5 py-1 rounded-lg bg-chispa-red text-xs font-extrabold text-white transition-colors" title="Cambiar velocidad de lectura">
+                      ${activeAudioState.speed}x
+                    </button>
+                    <!-- Control de Volumen -->
+                    <div class="flex items-center gap-1.5 bg-neutral-800 px-2.5 py-1 rounded-lg">
+                      <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414z"/></svg>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.1"
+                        value="${activeAudioState.volume}"
+                        oninput="changeAudioVolume(this.value)"
+                        class="w-14 chispa-slider"
+                        title="Volumen"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- LÍNEA DE TIEMPO VISIBLE EN ROJO ALTO CONTRASTE (#ff0000 sobre pista gris clara) -->
+                <div class="space-y-1">
+                  <div class="relative w-full flex items-center">
+                    <input
+                      type="range"
+                      min="0"
+                      max="${item.durationSec}"
+                      value="${currentSec}"
+                      oninput="seekCardAudio('${item.id}', this.value)"
+                      class="w-full chispa-slider"
+                    />
+                  </div>
+                  <div class="flex items-center justify-between text-[11px] font-extrabold text-neutral-300">
+                    <span id="card-time-cur-${item.id}">${formatTime(currentSec)}</span>
+                    <span id="card-audio-msg-${item.id}" class="text-neutral-400">
+                      ${isThisCardPlaying ? '🔊 Reproduciendo síntesis de voz en español...' : 'Pulsa Play para escuchar el artículo desarrollado'}
+                    </span>
+                    <span>${formatTime(item.durationSec)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. NOTICIA DESARROLLADA EN VERSIÓN MUY NEUTra -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 space-y-3">
+                <div class="text-xs font-extrabold uppercase tracking-wider text-neutral-400">
+                  Síntesis de Hechos Verificados · Redacción Neutral La Chispa
+                </div>
+                ${item.fullNeutralText.map(paragraph => `
+                  <p class="text-sm sm:text-base text-neutral-800 leading-relaxed">${paragraph}</p>
+                `).join("")}
+              </div>
+
+              <!-- 3. LAS 3 PESTAÑAS HORIZONTALES DE ANÁLISIS ("EL NÚCLEO DE LA CHISPA") -->
+              <div class="bg-white rounded-2xl p-5 sm:p-6 space-y-5">
+                
+                <!-- Selector de las 3 Pestañas de la Ficha de Detalle -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 bg-chispa-card p-1.5 rounded-xl">
+                  <button
+                    onclick="switchCardAnalysisTab('${item.id}', 'tab2')"
+                    class="py-2.5 px-3 rounded-lg text-xs sm:text-sm font-extrabold transition-all ${
+                      activeTab === 'tab2' ? 'bg-chispa-black text-white shadow-sm' : 'text-neutral-700 hover:text-black'
+                    }"
+                  >
+                    ⚖️ 1. El Espectro Simultáneo (3 Visiones)
+                  </button>
+                  <button
+                    onclick="switchCardAnalysisTab('${item.id}', 'tab1')"
+                    class="py-2.5 px-3 rounded-lg text-xs sm:text-sm font-extrabold transition-all ${
+                      activeTab === 'tab1' ? 'bg-chispa-black text-white shadow-sm' : 'text-neutral-700 hover:text-black'
+                    }"
+                  >
+                    📊 2. Desglose Estadístico (${item.stats.totalOutlets} fuentes)
+                  </button>
+                  <button
+                    onclick="switchCardAnalysisTab('${item.id}', 'tab3')"
+                    class="py-2.5 px-3 rounded-lg text-xs sm:text-sm font-extrabold transition-all ${
+                      activeTab === 'tab3' ? 'bg-chispa-red text-white shadow-sm' : 'text-neutral-700 hover:text-black'
+                    }"
+                  >
+                    🔍 3. El Punto Ciego (Enfatizan / Omiten)
+                  </button>
+                </div>
+
+                <!-- CONTENIDO PESTAÑA: EL ESPECTRO SIMULTÁNEO (Izquierda / Centro / Derecha) -->
+                ${activeTab === 'tab2' ? `
+                  <div class="space-y-4 fade-in">
+                    <!-- Conmutador rápido en móvil (Izquierda / Centro / Derecha) idéntico a tu prototipo -->
+                    <div class="grid grid-cols-3 gap-1.5 md:hidden bg-chispa-card p-1 rounded-xl">
+                      <button onclick="setMobileSpectrum('${item.id}', 'left')" class="py-2 rounded-lg text-xs font-extrabold ${activeMobileSpec === 'left' ? 'bg-chispa-red text-white' : 'text-black'}">Izquierda</button>
+                      <button onclick="setMobileSpectrum('${item.id}', 'center')" class="py-2 rounded-lg text-xs font-extrabold ${activeMobileSpec === 'center' ? 'bg-chispa-black text-white' : 'text-black'}">Centro</button>
+                      <button onclick="setMobileSpectrum('${item.id}', 'right')" class="py-2 rounded-lg text-xs font-extrabold ${activeMobileSpec === 'right' ? 'bg-chispa-black text-white' : 'text-black'}">Derecha</button>
+                    </div>
+
+                    <!-- 3 Columnas Simultáneas en Escritorio -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      
+                      <!-- Columna Izquierda -->
+                      <div class="${activeMobileSpec === 'left' ? 'block' : 'hidden md:block'} bg-chispa-card rounded-xl p-4 flex flex-col justify-between border-t-4 border-chispa-red">
+                        <div class="space-y-2">
+                          <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-chispa-red">${item.spectrum.left.outlet}</span>
+                            <span class="text-[10px] font-extrabold bg-white px-2 py-0.5 rounded">Izquierda</span>
+                          </div>
+                          <h4 class="font-extrabold text-base leading-snug text-black">"${item.spectrum.left.headline}"</h4>
+                          <p class="text-xs text-neutral-700 leading-relaxed">${item.spectrum.left.summary}</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-neutral-200/70">
+                          <a href="#buscar" onclick="setQuickSearch('${item.sources.left[0]}'); switchMainSection('buscar'); return false;" class="text-xs font-extrabold text-chispa-red hover:underline inline-flex items-center gap-1">
+                            Leer fuente (${item.sources.left[0]}) →
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- Columna Centro -->
+                      <div class="${activeMobileSpec === 'center' ? 'block' : 'hidden md:block'} bg-chispa-card rounded-xl p-4 flex flex-col justify-between border-t-4 border-neutral-500">
+                        <div class="space-y-2">
+                          <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-neutral-600">${item.spectrum.center.outlet}</span>
+                            <span class="text-[10px] font-extrabold bg-white px-2 py-0.5 rounded">Centro</span>
+                          </div>
+                          <h4 class="font-extrabold text-base leading-snug text-black">"${item.spectrum.center.headline}"</h4>
+                          <p class="text-xs text-neutral-700 leading-relaxed">${item.spectrum.center.summary}</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-neutral-200/70">
+                          <a href="#buscar" onclick="setQuickSearch('${item.sources.center[0]}'); switchMainSection('buscar'); return false;" class="text-xs font-extrabold text-chispa-black hover:underline inline-flex items-center gap-1">
+                            Leer fuente (${item.sources.center[0]}) →
+                          </a>
+                        </div>
+                      </div>
+
+                      <!-- Columna Derecha -->
+                      <div class="${activeMobileSpec === 'right' ? 'block' : 'hidden md:block'} bg-chispa-card rounded-xl p-4 flex flex-col justify-between border-t-4 border-chispa-black">
+                        <div class="space-y-2">
+                          <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider text-chispa-black">${item.spectrum.right.outlet}</span>
+                            <span class="text-[10px] font-extrabold bg-white px-2 py-0.5 rounded">Derecha</span>
+                          </div>
+                          <h4 class="font-extrabold text-base leading-snug text-black">"${item.spectrum.right.headline}"</h4>
+                          <p class="text-xs text-neutral-700 leading-relaxed">${item.spectrum.right.summary}</p>
+                        </div>
+                        <div class="pt-3 mt-3 border-t border-neutral-200/70">
+                          <a href="#buscar" onclick="setQuickSearch('${item.sources.right[0]}'); switchMainSection('buscar'); return false;" class="text-xs font-extrabold text-chispa-black hover:underline inline-flex items-center gap-1">
+                            Leer fuente (${item.sources.right[0]}) →
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- CONTENIDO PESTAÑA: DESGLOSE ESTADÍSTICO (Radiografía de Fuentes) -->
+                ${activeTab === 'tab1' ? `
+                  <div class="space-y-4 fade-in">
+                    <div class="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-neutral-500">
+                      <span>Cobertura por sesgo · ${item.stats.totalOutlets} medios monitorizados</span>
+                      <button onclick="switchMainSection('metodologia')" class="text-chispa-red hover:underline">Ver metodología de clasificación →</button>
+                    </div>
+
+                    <!-- Barra grande de porcentaje -->
+                    <div class="w-full h-4 rounded-full overflow-hidden flex bg-chispa-card p-0.5">
+                      <div style="width:${item.stats.left}%" class="bg-chispa-red rounded-l-full"></div>
+                      <div style="width:${item.stats.center}%" class="bg-neutral-400"></div>
+                      <div style="width:${item.stats.right}%" class="bg-chispa-black rounded-r-full"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                      <div class="bg-chispa-card rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                          <span class="font-extrabold text-sm text-chispa-red">Izquierda (${item.stats.left}%)</span>
+                          <span class="text-xs font-bold text-neutral-500">${item.sources.left.length} cabeceras</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                          ${item.sources.left.map(src => `<span class="px-2.5 py-1 rounded-lg bg-white text-xs font-bold">${src}</span>`).join("")}
+                        </div>
+                      </div>
+
+                      <div class="bg-chispa-card rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                          <span class="font-extrabold text-sm text-neutral-700">Centro (${item.stats.center}%)</span>
+                          <span class="text-xs font-bold text-neutral-500">${item.sources.center.length} cabeceras</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                          ${item.sources.center.map(src => `<span class="px-2.5 py-1 rounded-lg bg-white text-xs font-bold">${src}</span>`).join("")}
+                        </div>
+                      </div>
+
+                      <div class="bg-chispa-card rounded-xl p-4 space-y-2">
+                        <div class="flex justify-between items-center">
+                          <span class="font-extrabold text-sm text-chispa-black">Derecha (${item.stats.right}%)</span>
+                          <span class="text-xs font-bold text-neutral-500">${item.sources.right.length} cabeceras</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                          ${item.sources.right.map(src => `<span class="px-2.5 py-1 rounded-lg bg-white text-xs font-bold">${src}</span>`).join("")}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- CONTENIDO PESTAÑA: EL PUNTO CIEGO (QUÉ ENFATIZA / QUÉ OMITE CADA BLOQUE) -->
+                ${activeTab === 'tab3' ? `
+                  <div class="space-y-4 fade-in">
+                    <div class="flex items-center gap-2">
+                      <span class="w-3 h-3 rounded-full bg-chispa-red"></span>
+                      <span class="text-xs font-extrabold uppercase tracking-wider text-chispa-black">
+                        Radiografía comparativa · Sin juicios de valor
+                      </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="bg-chispa-card rounded-xl p-4 space-y-2.5">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-chispa-black">
+                          📌 SE ENFATIZA EN PORTADA
+                        </div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-neutral-800">
+                          ${item.blindspotAnalysis.emphasizes.map(point => `
+                            <li class="flex items-start gap-2">
+                              <span class="text-chispa-red font-extrabold">—</span>
+                              <span>${point}</span>
+                            </li>
+                          `).join("")}
+                        </ul>
+                      </div>
+
+                      <div class="bg-chispa-card rounded-xl p-4 space-y-2.5">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-chispa-red">
+                          🔍 SE OMITE O PASA POR ALTO
+                        </div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-neutral-800">
+                          ${item.blindspotAnalysis.omits.map(point => `
+                            <li class="flex items-start gap-2">
+                              <span class="text-chispa-red font-extrabold">—</span>
+                              <span>${point}</span>
+                            </li>
+                          `).join("")}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- Pie de la tarjeta desplegada: botón para debatir esta noticia en el Foro y botón para recoger -->
+                <div class="pt-3 border-t border-neutral-100 flex flex-wrap items-center justify-between gap-3">
+                  <button
+                    onclick="switchMainSection('opinion')"
+                    class="text-xs font-extrabold text-chispa-red hover:underline flex items-center gap-1"
+                  >
+                    💬 Debatir sobre esta noticia en el Foro de Contraste →
+                  </button>
+                  <button
+                    onclick="toggleCardExpand('${item.id}')"
+                    class="text-xs font-extrabold px-4 py-2 rounded-xl bg-chispa-card hover:bg-chispa-black hover:text-white transition-colors"
+                  >
+                    Recoger noticia ↑
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          ` : ''}
+
+        </article>
+      `;
+    }
+
+    // =====================================================================
+    // 8. INTERACCIONES DE TARJETAS (DESPLEGAR / PESTAÑAS / GUARDAR)
+    // =====================================================================
+    function toggleCardExpand(cardId) {
+      if (expandedCards.has(cardId)) {
+        expandedCards.delete(cardId);
+        if (activeAudioState.cardId === cardId) {
+          stopAllAudio();
+        }
+      } else {
+        expandedCards.add(cardId);
+      }
+      renderMainNewsFeed();
+    }
+
+    function jumpToAndExpandArticle(cardId) {
+      currentScopeFilter = "todas";
+      currentTopicFilter = "Todos los temas";
+      filterOnlyBlindspotsActive = false;
+      expandedCards.add(cardId);
+      switchMainSection("portada");
+      renderTopicFilterPills();
+      renderMainNewsFeed();
+      setTimeout(() => {
+        const el = document.getElementById(`card-${cardId}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
+    }
+
+    function switchCardAnalysisTab(cardId, tabKey) {
+      cardActiveTab[cardId] = tabKey;
+      renderMainNewsFeed();
+    }
+
+    function setMobileSpectrum(cardId, specKey) {
+      cardActiveSpectrumMobile[cardId] = specKey;
+      renderMainNewsFeed();
+    }
+
+    function toggleSaveArticle(cardId) {
+      if (savedArticles.includes(cardId)) {
+        savedArticles = savedArticles.filter(id => id !== cardId);
+      } else {
+        savedArticles.push(cardId);
+      }
+      localStorage.setItem("chispa_saved_articles", JSON.stringify(savedArticles));
+      renderMainNewsFeed();
+      renderSavedArticles();
+    }
+
+    // =====================================================================
+    // 9. MOTOR DE AUDIO Y PODCAST (SÍNTESIS DE VOZ ESPAÑOL + BARRA VISIBLE)
+    // =====================================================================
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const m = Math.floor(s / 60);
+      const rem = s % 60;
+      return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+    }
+
+    function stopAllAudio() {
+      if (activeAudioState.timerInterval) {
+        clearInterval(activeAudioState.timerInterval);
+        activeAudioState.timerInterval = null;
+      }
+      if ('speechSynthesis' in window) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      }
+      activeAudioState.isPlaying = false;
+    }
+
+    function speakTextInSpanish(textToRead) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToRead);
+        utterance.lang = "es-ES";
+        utterance.rate = activeAudioState.speed;
+        utterance.volume = activeAudioState.volume;
+        const voices = window.speechSynthesis.getVoices();
+        const esVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("es"));
+        if (esVoice) utterance.voice = esVoice;
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        // Fallback silencioso si el contenedor bloquea TTS
+      }
+    }
+
+    function toggleCardAudio(cardId) {
+      const item = NEWS_DATA.find(n => n.id === cardId);
+      if (!item) return;
+
+      // Si ya estaba sonando esta misma tarjeta -> Pausar
+      if (activeAudioState.cardId === cardId && activeAudioState.isPlaying) {
+        stopAllAudio();
+        renderMainNewsFeed();
+        return;
+      }
+
+      // Iniciar reproducción de esta tarjeta
+      stopAllAudio();
+      activeAudioState.cardId = cardId;
+      activeAudioState.isPlaying = true;
+      activeAudioState.totalSec = item.durationSec;
+      if (activeAudioState.currentSec >= item.durationSec) {
+        activeAudioState.currentSec = 0;
+      }
+
+      const fullSpeechScript = `${item.title}. ${item.fullNeutralText.join(" ")} En el contraste de medios: la izquierda destaca: ${item.spectrum.left.headline}. Mientras que la derecha subraya: ${item.spectrum.right.headline}.`;
+      speakTextInSpanish(fullSpeechScript);
+
+      activeAudioState.timerInterval = setInterval(() => {
+        activeAudioState.currentSec += 1 * activeAudioState.speed;
+        if (activeAudioState.currentSec >= item.durationSec) {
+          activeAudioState.currentSec = item.durationSec;
+          stopAllAudio();
+          renderMainNewsFeed();
+          return;
+        }
+        // Actualizar slider y texto en DOM sin re-renderizar toda la tarjeta para fluidez total
+        const slider = document.querySelector(`#card-${cardId} input[type="range"][max="${item.durationSec}"]`);
+        const curLabel = document.getElementById(`card-time-cur-${cardId}`);
+        if (slider) slider.value = Math.floor(activeAudioState.currentSec);
+        if (curLabel) curLabel.textContent = formatTime(activeAudioState.currentSec);
+      }, 1000);
+
+      renderMainNewsFeed();
+    }
+
+    function skipCardAudio(cardId, deltaSec) {
+      const item = NEWS_DATA.find(n => n.id === cardId);
+      if (!item) return;
+      if (activeAudioState.cardId !== cardId) {
+        activeAudioState.cardId = cardId;
+        activeAudioState.currentSec = 0;
+      }
+      activeAudioState.currentSec = Math.max(0, Math.min(item.durationSec, activeAudioState.currentSec + deltaSec));
+      renderMainNewsFeed();
+    }
+
+    function seekCardAudio(cardId, newValue) {
+      activeAudioState.cardId = cardId;
+      activeAudioState.currentSec = Number(newValue);
+      const curLabel = document.getElementById(`card-time-cur-${cardId}`);
+      if (curLabel) curLabel.textContent = formatTime(activeAudioState.currentSec);
+    }
+
+    function cycleCardSpeed(cardId) {
+      const speeds = [1, 1.5, 2];
+      const nextIdx = (speeds.indexOf(activeAudioState.speed) + 1) % speeds.length;
+      activeAudioState.speed = speeds[nextIdx];
+      if (activeAudioState.isPlaying && activeAudioState.cardId === cardId) {
+        toggleCardAudio(cardId);
+        toggleCardAudio(cardId);
+      } else {
+        renderMainNewsFeed();
+      }
+    }
+
+    function changeAudioVolume(val) {
+      activeAudioState.volume = Number(val);
+    }
+
+    // Reproductor Master de la sección "Podcast Diario"
+    function renderMasterPodcastChapters() {
+      const container = document.getElementById("podcastChaptersList");
+      if (!container) return;
+      container.innerHTML = NEWS_DATA.map((item, idx) => `
+        <div onclick="playMasterChapter(${idx})" class="bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 rounded-xl p-3.5 cursor-pointer flex items-center justify-between gap-3 transition-colors">
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-7 h-7 rounded-full bg-chispa-red text-white text-xs font-extrabold flex items-center justify-center shrink-0">${idx + 1}</span>
+            <div class="min-w-0">
+              <div class="text-[10px] font-extrabold uppercase text-neutral-400">${item.scopeLabel} · ${item.topic}</div>
+              <div class="text-xs sm:text-sm font-bold text-white truncate">${item.title}</div>
+            </div>
+          </div>
+          <span class="text-xs font-extrabold text-chispa-red shrink-0">▶ ${formatTime(item.durationSec)}</span>
+        </div>
+      `).join("");
+    }
+
+    function toggleMasterPodcast() {
+      const playIcon = document.getElementById("masterPlayIcon");
+      const label = document.getElementById("masterNowPlayingLabel");
+
+      if (activeAudioState.cardId === "MASTER" && activeAudioState.isPlaying) {
+        stopAllAudio();
+        if (playIcon) playIcon.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+        if (label) label.textContent = "En pausa · Pulsa Play para continuar";
+        return;
+      }
+
+      stopAllAudio();
+      activeAudioState.cardId = "MASTER";
+      activeAudioState.isPlaying = true;
+      activeAudioState.totalSec = 270;
+
+      const masterScript = "Boletín diario de la chispa del 4 de noviembre de 2026. " + NEWS_DATA.map((n, i) => `Noticia ${i + 1}: ${n.title}. ${n.shortSummary}`).join(" ");
+      speakTextInSpanish(masterScript);
+
+      if (playIcon) playIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+      if (label) label.textContent = "🔊 Reproduciendo Resumen Sonoro del Día...";
+
+      activeAudioState.timerInterval = setInterval(() => {
+        activeAudioState.currentSec += 1 * activeAudioState.speed;
+        if (activeAudioState.currentSec >= 270) {
+          activeAudioState.currentSec = 0;
+          stopAllAudio();
+          return;
+        }
+        const slider = document.getElementById("masterTimelineSlider");
+        const cur = document.getElementById("masterTimeCurrent");
+        if (slider) slider.value = Math.round((activeAudioState.currentSec / 270) * 100);
+        if (cur) cur.textContent = formatTime(activeAudioState.currentSec);
+      }, 1000);
+    }
+
+    function playMasterChapter(idx) {
+      const item = NEWS_DATA[idx];
+      if (!item) return;
+      stopAllAudio();
+      const titleEl = document.getElementById("masterCurrentChapterTitle");
+      if (titleEl) titleEl.textContent = `Capítulo ${idx + 1}: ${item.title}`;
+      toggleMasterPodcast();
+    }
+
+    function skipMasterAudio(delta) {
+      activeAudioState.currentSec = Math.max(0, Math.min(270, activeAudioState.currentSec + delta));
+      const cur = document.getElementById("masterTimeCurrent");
+      const slider = document.getElementById("masterTimelineSlider");
+      if (cur) cur.textContent = formatTime(activeAudioState.currentSec);
+      if (slider) slider.value = Math.round((activeAudioState.currentSec / 270) * 100);
+    }
+
+    function seekMasterAudio(pct) {
+      activeAudioState.currentSec = Math.round((Number(pct) / 100) * 270);
+      const cur = document.getElementById("masterTimeCurrent");
+      if (cur) cur.textContent = formatTime(activeAudioState.currentSec);
+    }
+
+    function cycleMasterSpeed() {
+      const speeds = [1, 1.5, 2];
+      activeAudioState.speed = speeds[(speeds.indexOf(activeAudioState.speed) + 1) % speeds.length];
+      const btn = document.getElementById("masterSpeedBtn");
+      if (btn) btn.textContent = `${activeAudioState.speed}x`;
+    }
+
+    // =====================================================================
+    // 10. FORO DE OPINIÓN Y CONTRASTE EN VIVO
+    // =====================================================================
+    let opinionVotes = { left: 142, right: 138 };
+    function VoteOpinion(side) {
+      opinionVotes[side]++;
+      document.getElementById("voteLeftCount").textContent = opinionVotes.left;
+      document.getElementById("voteRightCount").textContent = opinionVotes.right;
+    }
+
+    function filterForum(stance) {
+      currentForumFilter = stance;
+      document.querySelectorAll(".forum-filter-btn").forEach(btn => {
+        btn.classList.remove("bg-chispa-black", "text-white", "font-extrabold");
+        btn.classList.add("bg-white", "text-black", "font-bold");
+      });
+      const active = document.getElementById(`forum-filter-${stance}`);
+      if (active) {
+        active.classList.add("bg-chispa-black", "text-white", "font-extrabold");
+        active.classList.remove("bg-white", "text-black", "font-bold");
+      }
+      renderForumPosts();
+    }
+
+    function submitForumPost(e) {
+      e.preventDefault();
+      const alias = document.getElementById("forumUserAlias").value.trim();
+      const stance = document.getElementById("forumUserStance").value;
+      const topic = document.getElementById("forumTopicRef").value;
+      const comment = document.getElementById("forumUserComment").value.trim();
+      if (!alias || !comment) return;
+
+      const newPost = {
+        id: Date.now(),
+        alias,
+        stance,
+        topic,
+        comment,
+        likes: 1,
+        time: "Ahora mismo"
+      };
+      forumPosts.unshift(newPost);
+      localStorage.setItem("chispa_forum_posts", JSON.stringify(forumPosts));
+      document.getElementById("forumUserComment").value = "";
+      renderForumPosts();
+    }
+
+    function likeForumPost(postId) {
+      const post = forumPosts.find(p => p.id === postId);
+      if (post) {
+        post.likes++;
+        localStorage.setItem("chispa_forum_posts", JSON.stringify(forumPosts));
+        renderForumPosts();
+      }
+    }
+
+    function renderForumPosts() {
+      const list = document.getElementById("forumCommentsList");
+      if (!list) return;
+
+      const filtered = forumPosts.filter(p => currentForumFilter === "all" || p.stance === currentForumFilter);
+      list.innerHTML = filtered.map(post => {
+        const badgeStyle = post.stance === "Izquierda"
+          ? "bg-chispa-red text-white"
+          : post.stance === "Derecha"
+          ? "bg-chispa-black text-white"
+          : "bg-neutral-200 text-black";
+        return `
+          <div class="bg-white rounded-2xl p-4 sm:p-5 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-extrabold text-sm">${post.alias}</span>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${badgeStyle}">Perspectiva: ${post.stance}</span>
+                <span class="text-xs font-bold text-neutral-400">· ${post.topic}</span>
+              </div>
+              <span class="text-xs text-neutral-400 font-medium">${post.time}</span>
+            </div>
+            <p class="text-sm text-neutral-800 leading-relaxed">${post.comment}</p>
+            <div class="pt-1 flex justify-end">
+              <button onclick="likeForumPost(${post.id})" class="text-xs font-extrabold px-3 py-1 rounded-full bg-chispa-card hover:bg-black hover:text-white transition-colors">
+                ▲ Aporta al contraste (${post.likes})
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // =====================================================================
+    // 11. BUSCADOR INSTANTÁNEO Y ARCHIVO
+    // =====================================================================
+    function setQuickSearch(term) {
+      const input = document.getElementById("archiveSearchInput");
+      if (input) {
+        input.value = term;
+        runArchiveSearch();
+      }
+    }
+
+    function clearArchiveSearch() {
+      const input = document.getElementById("archiveSearchInput");
+      if (input) {
+        input.value = "";
+        runArchiveSearch();
+      }
+    }
+
+    function runArchiveSearch() {
+      const input = document.getElementById("archiveSearchInput");
+      const container = document.getElementById("archiveResultsContainer");
+      if (!container) return;
+
+      const query = (input ? input.value : "").toLowerCase().trim();
+      const results = NEWS_DATA.filter(item => {
+        if (!query) return true;
+        const haystack = [
+          item.title,
+          item.shortSummary,
+          item.topic,
+          item.scopeLabel,
+          ...item.fullNeutralText,
+          ...item.sources.left,
+          ...item.sources.center,
+          ...item.sources.right
+        ].join(" ").toLowerCase();
+        return haystack.includes(query);
+      });
+
+      if (results.length === 0) {
+        container.innerHTML = `
+          <div class="bg-chispa-card rounded-2xl p-8 text-center">
+            <p class="font-extrabold text-lg">No se encontraron noticias para "${input.value}"</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = results.map(item => `
+        <div onclick="jumpToAndExpandArticle('${item.id}')" class="bg-chispa-card hover:bg-neutral-200/70 transition-colors rounded-2xl p-5 cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-chispa-black text-white">${item.scopeLabel}</span>
+              <span class="text-xs font-extrabold text-chispa-red">${item.topic}</span>
+              <span class="text-xs text-neutral-500 font-bold">· ${item.stats.totalOutlets} medios agrupados</span>
+            </div>
+            <h3 class="font-extrabold text-lg text-black">${item.title}</h3>
+            <p class="text-xs sm:text-sm text-neutral-600 line-clamp-2">${item.shortSummary}</p>
+          </div>
+          <span class="text-xs font-extrabold px-4 py-2 rounded-full bg-white text-black shrink-0">
+            Abrir radiografía →
+          </span>
+        </div>
+      `).join("");
+    }
+
+    function renderArchiveSearch() {
+      runArchiveSearch();
+    }
+
+    // =====================================================================
+    // 12. CUENTA DE USUARIO ("MI SESGO") Y NOTICIAS GUARDADAS
+    // =====================================================================
+    function setUserBias(biasKey) {
+      userBias = biasKey;
+      localStorage.setItem("chispa_user_bias", biasKey);
+      updateBiasUI();
+      renderMainNewsFeed();
+    }
+
+    function updateBiasUI() {
+      document.querySelectorAll(".bias-choice-btn").forEach(btn => {
+        btn.classList.remove("ring-2", "ring-chispa-red");
+      });
+      const activeBtn = document.getElementById(`bias-btn-${userBias}`);
+      if (activeBtn) activeBtn.classList.add("ring-2", "ring-chispa-red");
+
+      const bannerText = document.getElementById("activeBiasBannerText");
+      const navDot = document.getElementById("navBiasIndicator");
+
+      if (userBias === "ninguno") {
+        if (bannerText) bannerText.textContent = "Configura tu sesgo para detectar tus puntos ciegos →";
+        if (navDot) navDot.classList.add("hidden");
+      } else {
+        const labels = {
+          izquierda: "Sesgo declarado: Izquierda (Destacamos foco de Derecha)",
+          centro: "Sesgo declarado: Centro (Destacamos extremos)",
+          derecha: "Sesgo declarado: Derecha (Destacamos foco de Izquierda)"
+        };
+        if (bannerText) bannerText.textContent = labels[userBias];
+        if (navDot) navDot.classList.remove("hidden");
+      }
+    }
+
+    function renderSavedArticles() {
+      const container = document.getElementById("savedArticlesContainer");
+      const countLabel = document.getElementById("savedCountLabel");
+      if (!container) return;
+
+      const items = NEWS_DATA.filter(n => savedArticles.includes(n.id));
+      if (countLabel) countLabel.textContent = `${items.length} ${items.length === 1 ? 'guardada' : 'guardadas'}`;
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-xl p-6 text-center text-sm text-neutral-500 font-medium">
+            Aún no has guardado ninguna noticia. Pulsa el botón <strong>"☆ Guardar"</strong> en cualquier tarjeta de la Portada.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+        <div class="bg-white rounded-xl p-4 flex items-center justify-between gap-4">
+          <div onclick="jumpToAndExpandArticle('${item.id}')" class="cursor-pointer space-y-1">
+            <span class="text-[10px] font-extrabold uppercase text-chispa-red">${item.scopeLabel} · ${item.topic}</span>
+            <h4 class="font-extrabold text-base hover:underline">${item.title}</h4>
+          </div>
+          <button onclick="toggleSaveArticle('${item.id}')" class="text-xs font-extrabold text-neutral-400 hover:text-chispa-red shrink-0">
+            Quitar ✕
+          </button>
+        </div>
+      `).join("");
+    }
+
+    // =====================================================================
+    // 13. MODAL DE AUTOMATIZACIÓN Y COPIADO DE PROMPT AL PORTAPAPELES
+    // =====================================================================
+    function openAutomationModal() {
+      const m = document.getElementById("automationModal");
+      if (m) {
+        m.classList.remove("hidden");
+        m.classList.add("flex");
+      }
+    }
+
+    function closeAutomationModal() {
+      const m = document.getElementById("automationModal");
+      if (m) {
+        m.classList.add("hidden");
+        m.classList.remove("flex");
+      }
+    }
+
+    function copyDailyPrompt() {
+      const textarea = document.getElementById("dailyPromptTextarea");
+      const btn = document.getElementById("copyPromptBtn");
+      if (!textarea) return;
+      textarea.select();
+      document.execCommand("copy");
+      if (btn) {
+        btn.textContent = "¡Copiado al portapapeles!";
+        setTimeout(() => { btn.textContent = "Copiar Prompt Maestro"; }, 2200);
+      }
+    }
+  </script>
+</body>
+</html>
